@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                                         .setMessage("Sus datos han sido registrados de manera correcta")
                                         .create()
                                         .show()
+                                    println(listaUsuarios)
                                 }
                                 else{
                                     AlertDialog.Builder(this)
@@ -56,45 +59,64 @@ class MainActivity : AppCompatActivity() {
                                         .create()
                                         .show()
                                 }
-                            else noCumpleClave()
-                        else noCumple("Número de Teléfono")
-                    else noCumple("E-mail")
+                            else noCumple("clave")
+                        else noCumple("telefono")
+                    else noCumple("e-mail")
                 else noCumple("Apellidos")
             else noCumple("Nombres")
-
-
-            
-            if (validarContrasena(edtPass.text.toString()))
-                listaUsuarios.add(Usuario(edtUsuario.text.toString(), edtPass.text.toString()))
-            else
-                Toast.makeText(this, "No cumple con las politicas", Toast.LENGTH_LONG).show()
 
         }
 
 
     }
 
-    private fun noCumpleClave() {
-
-    }
-
     private fun validarContrasena(clave: String): Boolean {
+        var pattern: Pattern
+        var matcher: Matcher
+
+        val PATRON_CONTRASENA = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@!%*?&;:+])(?=\\S+$).{8,}$"
+
+        pattern = Pattern.compile(PATRON_CONTRASENA)
+        matcher = pattern.matcher(clave)
+
+        return matcher.matches();
 
     }
 
     private fun validarNumero(numero: String): Boolean {
-
+        var patron: Pattern
+        var comparador: Matcher
+        val expresion = "^\\d+\$"
+        patron = Pattern.compile(expresion)
+        comparador = patron.matcher(numero)
+        return comparador.matches()
     }
 
     private fun validarCorreo(correo: String): Boolean {
-
+        var patron: Pattern
+        var comparador: Matcher
+        val regAseguir = "^[-a-z0-9~!\$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!\$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?\$"
+        patron = Pattern.compile(regAseguir)
+        comparador = patron.matcher(correo)
+        return comparador.matches()
     }
 
     private fun validarTexto(cadena: String): Boolean {
-
+        var patron: Pattern
+        var comparador: Matcher
+        val expresion = "^[\\w ]+$"
+        patron = Pattern.compile(expresion)
+        comparador = patron.matcher(cadena)
+        return comparador.matches()
     }
     private fun noCumple(cadena: String){
-        var mensaje : String = "Debe diligenciar correctamente el campo " + cadena
+        var mensaje: String
+        when (cadena){
+            "clave" -> mensaje="La contraseña debe ser de mínimo 8 caracteres, contener numeros, letras (mayusculas y minusculas) y caracteres especiales"
+            "e-mail" -> mensaje="El correo debe ser válido del tipo correo@servidor.com"
+            "telefono" -> mensaje="El teléfono deben ser sólo números sin guiones, espacios o caracteres especiales"
+            else -> mensaje = "Debe diligenciar correctamente el campo " + cadena
+        }
         Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
     }
 
