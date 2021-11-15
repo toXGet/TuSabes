@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Tu Sabes</string>
+    <string name="registerTitle">Registro</string>
+    <string name="rergisterNames">Nombres:</string>
+    <string name="registerSurnames">Apellidos:</string>
+    <string name="registerEmail">e-mail:</string>
+    <string name="registerPassword">Contraseña:</string>
+    <string name="registerPhone">Número de Teléfono</string>
+    <string name="registerAccept">Acepto la política de declaración de privacidad y los términos y condiciones de uso</string>
+    <string name="registerButtonOk">Aceptar</string>
+</resources>
