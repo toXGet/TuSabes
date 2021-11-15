@@ -1,12 +1,10 @@
 package com.example.tusabes
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -67,6 +65,18 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        val tvDeclaracion = findViewById<TextView>(R.id.tvDeclaracion)
+        val tvTerminos = findViewById<TextView>(R.id.tvTerminos)
+        tvDeclaracion.setOnClickListener {
+            val intent = Intent(this, PaginasLegales::class.java)
+            intent.putExtra("tipo", "declaracion")
+            startActivity(intent)
+        }
+        tvTerminos.setOnClickListener {
+            val intent = Intent(this, PaginasLegales::class.java)
+            intent.putExtra("tipo", "terminos")
+            startActivity(intent)
+        }
 
     }
 

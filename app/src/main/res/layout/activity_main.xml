@@ -86,12 +86,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
             android:layout_margin="20dp">
             <CheckBox
                 android:id="@+id/cbCheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/registerAccept"/>
+            <TextView
+                android:id="@+id/tvDeclaracion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerLinkDeclaracionPrivacidad"
+                android:textStyle="italic"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/blue_700"/>
+            <TextView
+                android:id="@+id/tvTerminos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerLinkTerminosUso"
+                android:textStyle="italic"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/blue_700"/>
 
         </LinearLayout>
         <LinearLayout
