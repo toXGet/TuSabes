@@ -10,22 +10,35 @@
     <string name="registerButtonOk">Aceptar</string>
     <string name="declaracionPrivacidadTitulo">Declaración de Privacidad y Tratamiento de Datos Personales</string>
     <string name="condicionesUsoTitulo">Condiciones de Uso de la App Tu Sabes</string>
-    <string name="declaracionPrivacidad">La Aplicación Tu Sabes (de aqui en adelante llamada LA APP) y su desarrollador K-Droid, en cumplimiento de la Ley 1581 de 2012 y demás normas concordantes, es responsable del tratamiento de sus datos personales.
-
-Los datos personales que LA APP solicita serán utilizados para registrarlo como usuario de la plataforma y llevar una estadística de resultados de las pruebas que usted ejercita con LA APP.
-
-Como titular de información tiene derecho a conocer, actualizar y rectificar sus datos personales y, sólo en los casos en que sea procedente, a suprimirlos o revocar la autorización otorgada para su tratamiento.
-
-Si requiere mayor información para conocer nuestra política de tratamiento de datos personales y los cambios sustanciales que se produzcan en ella, consulte aquí (Link En Construcción).
-
-Si desea presentar una consulta, reclamo o petición de información relacionada con la protección de datos personales puede contactarse al correo atencion@tusabes.kdroid.com</string>
-    <string name="condicionesUso">El presente documento establece las condiciones mediante las cuales se regirá el uso de la aplicación móvil: Tu Sabes (en adelante la aplicación), la cual es operada por K-Droid Developers (en adelante K-Droid).
-
-La aplicación funcionará como un modo de practica y preparación de los usuarios para la presentación de las pruebas Saber 2022.
-
-El usuario se compromete a leer los términos y condiciones aquí establecidas, previamente a la descarga de la aplicación, por tanto, en caso de realizar la instalación se entiende que cuenta con el conocimiento integral de este documento y la consecuente aceptación de la totalidad de sus estipulaciones.
-
-El Usuario reconoce que el ingreso de su información personal, y los datos que contiene la aplicación a su disposición respecto a la aplicación, la realizan de manera voluntaria, quienes optan por acceder a esta aplicación en Colombia o desde fuera del territorio nacional, lo hacen por iniciativa propia y son responsables del cumplimiento de las leyes locales, en la medida en que dichas leyes sean aplicables en su correspondiente país. En caso de que se acceda por parte de menores de edad, deben contar con la supervisión de un adulto en todo momento desde la descarga y durante el uso de la aplicación, en el evento en que no se cumpla esta condición, le agradecemos no hacer uso de la aplicación.</string>
+    <string name="declaracionPrivacidad">La Aplicación Tu Sabes (de aqui en adelante llamada LA APP)
+        y su desarrollador K-Droid, en cumplimiento de la Ley 1581 de 2012 y demás normas concordantes,
+        es responsable del tratamiento de sus datos personales.
+        Los datos personales que LA APP solicita serán utilizados para registrarlo como usuario de la
+        plataforma y llevar una estadística de resultados de las pruebas que usted ejercita con LA APP.
+        Como titular de información tiene derecho a conocer, actualizar y rectificar sus datos personales
+        y, sólo en los casos en que sea procedente, a suprimirlos o revocar la autorización otorgada
+        para su tratamiento.
+        Si requiere mayor información para conocer nuestra política de tratamiento de datos personales
+        y los cambios sustanciales que se produzcan en ella, consulte aquí (Link En Construcción).
+        Si desea presentar una consulta, reclamo o petición de información relacionada con la protección
+        de datos personales puede contactarse al correo atencion@tusabes.kdroid.com</string>
+    <string name="condicionesUso">El presente documento establece las condiciones mediante las cuales
+        se regirá el uso de la aplicación móvil: Tu Sabes (en adelante la aplicación), la cual es operada
+        por K-Droid Developers (en adelante K-Droid).
+        La aplicación funcionará como un modo de practica y preparación de los usuarios para la
+        presentación de las pruebas Saber 2022.
+        El usuario se compromete a leer los términos y condiciones aquí establecidas, previamente a la
+        descarga de la aplicación, por tanto, en caso de realizar la instalación se entiende que cuenta
+        con el conocimiento integral de este documento y la consecuente aceptación de la totalidad de sus
+        estipulaciones.
+        El Usuario reconoce que el ingreso de su información personal, y los datos que contiene la
+        aplicación a su disposición respecto a la aplicación, la realizan de manera voluntaria, quienes
+        optan por acceder a esta aplicación en Colombia o desde fuera del territorio nacional, lo hacen
+        por iniciativa propia y son responsables del cumplimiento de las leyes locales, en la medida en
+        que dichas leyes sean aplicables en su correspondiente país. En caso de que se acceda por parte de
+        menores de edad, deben contar con la supervisión de un adulto en todo momento desde la descarga y
+        durante el uso de la aplicación, en el evento en que no se cumpla esta condición, le agradecemos no
+        hacer uso de la aplicación.</string>
     <string name="registerLinkDeclaracionPrivacidad"><u>Declaración de privacidad</u></string>
     <string name="registerLinkTerminosUso"><u>Términos de Uso</u></string>
 </resources>
