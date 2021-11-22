@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.tusabes.Convertidores
 import com.example.tusabes.dao.CategoriaDAO
 import com.example.tusabes.dao.PreguntaDAO
 import com.example.tusabes.dao.PruebaDAO
@@ -14,6 +16,7 @@ import com.example.tusabes.model.Prueba
 import com.example.tusabes.model.User
 
 @Database(entities = [User::class, Pregunta::class, Categoria::class, Prueba::class], version = 1)
+@TypeConverters(Convertidores::class)
 abstract class TuSabesDB : RoomDatabase() {
     // Las operaciones que voy a tener en la DB
     abstract fun UsersDAO() : UserDAO

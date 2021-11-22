@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Tu Sabes</string>
     <string name="registerTitle">Registro</string>
-    <string name="rergisterNames">Nombres:</string>
-    <string name="registerSurnames">Apellidos:</string>
-    <string name="registerEmail">e-mail:</string>
-    <string name="registerPassword">Contraseña:</string>
-    <string name="registerPhone">Número de Teléfono</string>
+    <string name="names_campo">Escribe tu(s) Nombre(s)</string>
+    <string name="surnames_campo">Escribe tu(s) Apellido(s)</string>
+    <string name="email_campo">Escribe tu e-mail</string>
+    <string name="passwd_conf_campo">Vuelve a escribir tu Contraseña</string>
     <string name="registerAccept">Acepto la política de declaración de privacidad y los términos y condiciones de uso.</string>
     <string name="registerButtonOk">Aceptar</string>
     <string name="declaracionPrivacidadTitulo">Declaración de Privacidad y Tratamiento de Datos Personales</string>
@@ -41,4 +40,14 @@
         hacer uso de la aplicación.</string>
     <string name="registerLinkDeclaracionPrivacidad"><u>Declaración de privacidad</u></string>
     <string name="registerLinkTerminosUso"><u>Términos de Uso</u></string>
+
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="title_welcome">Bienvenido</string>
+    <string name="username_campo">Escribe Tu Nombre de Usuario</string>
+    <string name="password_campo">Escribe tu Clave</string>
+    <string name="btn_ingresar">Ingresar</string>
+    <string name="rol_campo">Soy Profesor</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

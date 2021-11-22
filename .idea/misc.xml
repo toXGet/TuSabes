@@ -5,6 +5,12 @@
       <map>
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/activity_paginas_legales.xml" value="0.1796875" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_bienvenida.xml" value="0.165625" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_estudiante.xml" value="0.165625" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_legal_scrolling.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_login.xml" value="0.22" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_paginas_legales.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_registro.xml" value="0.22" />
       </map>
     </option>
   </component>
