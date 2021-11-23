@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 
 class BienvenidaFragment : Fragment() {
 
@@ -21,6 +23,8 @@ class BienvenidaFragment : Fragment() {
 
         val btnLogin = fragmento.findViewById<Button>(R.id.btnLogin)
         val btnRegistro = fragmento.findViewById<Button>(R.id.btnRegistro)
+        val imgBienvenida = fragmento.findViewById<ImageView>(R.id.imgBienvenida)
+        val tvBienvenida = fragmento.findViewById<TextView>(R.id.tvBienvenida)
 
         btnLogin.setOnClickListener {
             childFragmentManager.beginTransaction().setReorderingAllowed(true)
@@ -34,6 +38,8 @@ class BienvenidaFragment : Fragment() {
                 .replace(R.id.fragmentPantallaBienvenida, RegistroFragment::class.java,null,"registro")
                 .commit()
             hideButtons(btnLogin, btnRegistro)
+            imgBienvenida.visibility = View.GONE
+            tvBienvenida.visibility = View.GONE
         }
 
         return fragmento

@@ -60,7 +60,7 @@ class RegistroFragment : Fragment() {
                                         val usuario = User(0,"${edtNick.text}","${edtClave.text}",
                                             "${edtEmail.text}","${edtNombres.text}",
                                             "${edtApellidos.text}", rol)
-                                        grabarDatos(usuario)
+                                        grabarDatos(usuario, fragmento)
                                     }else{noCumple("terminos")}
                                 else noCumple("mismaClave")
                             else noCumple("clave")
@@ -73,7 +73,7 @@ class RegistroFragment : Fragment() {
         return fragmento
     }
 
-    private fun grabarDatos(usuario: User) {
+    private fun grabarDatos(usuario: User, vista: View) {
         val context = activity?.applicationContext
         CoroutineScope(Dispatchers.IO).launch{
             val database = context?.let { TuSabesDB.getDataBase(it)}
@@ -82,7 +82,7 @@ class RegistroFragment : Fragment() {
             }
         }
         val boton = {_:DialogInterface,_:Int -> iniciar(usuario.rol)}
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(vista.context)
             .setTitle("${usuario.usuario} Registrado")
             .setMessage("Tus datos han sido registrados de manera correcta")
             .setPositiveButton("OK", boton)
@@ -91,18 +91,18 @@ class RegistroFragment : Fragment() {
     }
 
     private fun iniciar(rol: String) {
-        if (rol == "Profesor"){
+       if (rol == "Profesor"){
 
         }else {
-            parentFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.setReorderingAllowed(true)
+                ?.replace(
                     R.id.fragmentContenedorPrincipal,
                     EstudianteFragment::class.java,
                     null,
                     "estudiante"
                 )
-                .commit()
+                ?.commit()
         }
     }
 
@@ -127,6 +127,7 @@ class RegistroFragment : Fragment() {
                 val database = context?.let { TuSabesDB.getDataBase(it)}
                 if (database != null){
                     existe = database.UsersDAO().getUserByNick(entrada).id
+                    println("El numero es $existe")
                 }
             }
             return existe == 0

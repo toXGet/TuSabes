@@ -7,12 +7,14 @@
     android:orientation="vertical"
     android:layout_margin="20dp">
     <ImageView
+        android:id="@+id/imgBienvenida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/bienvenida"
         android:layout_margin="20dp"/>
     <TextView
+        android:id="@+id/tvBienvenida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
