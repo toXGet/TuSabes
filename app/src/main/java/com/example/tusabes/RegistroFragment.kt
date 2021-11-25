@@ -44,7 +44,7 @@ class RegistroFragment : Fragment() {
 
         binding.tvDeclaracion.setOnClickListener {
             println("Click en Declaración de Privacidad")
-            childFragmentManager.beginTransaction().setReorderingAllowed(true)
+            parentFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.fragmentPantallaBienvenida,PaginasLegalesFragment::class.java
                     , bundleOf("tipo" to "declaracion"),"legales")
                 .addToBackStack("legales")
@@ -53,7 +53,7 @@ class RegistroFragment : Fragment() {
 
         binding.tvTerminos.setOnClickListener {
             println("Click en Términos y condiciones")
-            childFragmentManager.beginTransaction().setReorderingAllowed(true)
+            parentFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.fragmentPantallaBienvenida,PaginasLegalesFragment::class.java
                     , bundleOf("tipo" to "terminos"),"legales")
                 .addToBackStack("legales")
@@ -108,6 +108,7 @@ class RegistroFragment : Fragment() {
             "correo" -> mensaje="El correo debe ser válido del tipo correo@servidor.com"
             "nick" -> mensaje="Ese nombre de usuario ya está en uso, por favor escoja otro"
             "terminos" -> mensaje = "Debe Aceptar los terminos y condiciones para continuar"
+            "todo" -> mensaje= "Debes llenar todos los campos, no pueden quedar campos vacíos"
             else -> mensaje = "Debe diligenciar correctamente el campo " + tipoDato
         }
         Toast.makeText(activity?.applicationContext, mensaje, Toast.LENGTH_LONG).show()
@@ -159,30 +160,33 @@ class RegistroFragment : Fragment() {
     private fun validarInfo(entrada: String, tipoDato: String) : Boolean{
         val context = activity?.applicationContext
         var existe: Int = 0
-        if (tipoDato == "nick"){
-            CoroutineScope(Dispatchers.IO).launch{
-                val database = context?.let { TuSabesDB.getDataBase(it)}
-                if (database != null){
+        if (tipoDato == "nick") {
+            CoroutineScope(Dispatchers.IO).launch {
+                val database = context?.let { TuSabesDB.getDataBase(it) }
+                if (database != null) {
                     existe = database.UsersDAO().getUserByNick(entrada).id
+                    println("EL DATO ES $existe")
                 }
             }
             sleep(500)
             return existe != 0
-        }
-        else{
+        } else {
             var regularExp: String
             var patron: Pattern
             var comparador: Matcher
 
-            when (tipoDato){
+            when (tipoDato) {
                 "texto" -> regularExp = "^[\\w ]+$"
-                "correo" -> regularExp = "^[-a-z0-9~!\$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!\$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?\$"
-                "clave" -> regularExp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@!%*?&;:+])(?=\\S+$).{8,}$"
+                "correo" -> regularExp =
+                    "^[-a-z0-9~!\$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!\$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?\$"
+                "clave" -> regularExp =
+                    "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@!%*?&;:+])(?=\\S+$).{8,}$"
                 else -> regularExp = ""
             }
             patron = Pattern.compile(regularExp)
             comparador = patron.matcher(entrada)
             return comparador.matches()
         }
+
     }
 }
