@@ -10,17 +10,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.example.tusabes.database.TuSabesDB
+import com.example.tusabes.databinding.FragmentRegistroBinding
 import com.example.tusabes.model.User
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class RegistroFragment : Fragment() {
+    private var _binding: FragmentRegistroBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,50 +35,35 @@ class RegistroFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmento = inflater.inflate(R.layout.fragment_registro, container, false)
 
-        val edtNombres = fragmento.findViewById<TextInputEditText>(R.id.edtNombres)
-        val edtApellidos = fragmento.findViewById<TextInputEditText>(R.id.edtApellidos)
-        val edtEmail = fragmento.findViewById<TextInputEditText>(R.id.edtEmail)
-        val edtNick = fragmento.findViewById<TextInputEditText>(R.id.edtNombreUsuario)
-        val edtClave = fragmento.findViewById<TextInputEditText>(R.id.edtPassword)
-        val edtClaveConf = fragmento.findViewById<TextInputEditText>(R.id.edtConfirmaPasswd)
-        val chkRol = fragmento.findViewById<MaterialCheckBox>(R.id.chbRol)
-        val chkTerminos = fragmento.findViewById<MaterialCheckBox>(R.id.chbAceptarTyC)
-        val tvDeclaracion = fragmento.findViewById<TextView>(R.id.tvDeclaracion)
-        val tvTerminos = fragmento.findViewById<TextView>(R.id.tvTerminos)
-        val btnRegistro = fragmento.findViewById<Button>(R.id.btnRegistro)
+        _binding = FragmentRegistroBinding.inflate(inflater,container,false)
 
-        btnRegistro.setOnClickListener {
-            if (validarInfo(edtNombres.text.toString(), "texto"))
-                if (validarInfo(edtApellidos.text.toString(), "texto"))
-                    if (validarInfo(edtEmail.text.toString(), "correo"))
-                        if (validarInfo(edtNick.text.toString(), "nick"))
-                            if (validarInfo(edtClave.text.toString(), "clave"))
-                                if (edtClaveConf.text.toString() == edtClave.text.toString())
-                                    if (chkTerminos.isChecked){
-                                        val rol : String
-                                        rol = when (chkRol.isChecked){
-                                            true -> "Profesor"
-                                            false -> "Estudiante"
-                                        }
-                                        val usuario = User(0,"${edtNick.text}","${edtClave.text}",
-                                            "${edtEmail.text}","${edtNombres.text}",
-                                            "${edtApellidos.text}", rol)
-                                        grabarDatos(usuario, fragmento)
-                                    }else{noCumple("terminos")}
-                                else noCumple("mismaClave")
-                            else noCumple("clave")
-                        else noCumple("nick")
-                    else noCumple("correo")
-                else noCumple("apellidos")
-            else noCumple("nombres")
+        binding.btnRegistro.setOnClickListener {
+            registrar()
         }
 
-        return fragmento
+        binding.tvDeclaracion.setOnClickListener {
+            println("Click en Declaración de Privacidad")
+            childFragmentManager.beginTransaction().setReorderingAllowed(true)
+                .replace(R.id.fragmentPantallaBienvenida,PaginasLegalesFragment::class.java
+                    , bundleOf("tipo" to "declaracion"),"legales")
+                .addToBackStack("legales")
+                .commit()
+        }
+
+        binding.tvTerminos.setOnClickListener {
+            println("Click en Términos y condiciones")
+            childFragmentManager.beginTransaction().setReorderingAllowed(true)
+                .replace(R.id.fragmentPantallaBienvenida,PaginasLegalesFragment::class.java
+                    , bundleOf("tipo" to "terminos"),"legales")
+                .addToBackStack("legales")
+                .commit()
+        }
+
+        return binding.root
     }
 
-    private fun grabarDatos(usuario: User, vista: View) {
+    private fun grabarDatos(usuario: User) {
         val context = activity?.applicationContext
         CoroutineScope(Dispatchers.IO).launch{
             val database = context?.let { TuSabesDB.getDataBase(it)}
@@ -81,8 +71,9 @@ class RegistroFragment : Fragment() {
                 database.UsersDAO().insert(usuario)
             }
         }
+        sleep(500)
         val boton = {_:DialogInterface,_:Int -> iniciar(usuario.rol)}
-        AlertDialog.Builder(vista.context)
+        AlertDialog.Builder(binding.root.context)
             .setTitle("${usuario.usuario} Registrado")
             .setMessage("Tus datos han sido registrados de manera correcta")
             .setPositiveButton("OK", boton)
@@ -122,6 +113,49 @@ class RegistroFragment : Fragment() {
         Toast.makeText(activity?.applicationContext, mensaje, Toast.LENGTH_LONG).show()
     }
 
+    private fun registrar(){
+        var control: Boolean = true
+        if (!validarInfo(binding.edtNombres.text.toString(),"texto")){
+            noCumple("Nombres")
+            control = false
+        }
+        if (!validarInfo(binding.edtApellidos.text.toString(),"texto")) {
+            noCumple("Apellidos")
+            control = false
+        }
+        if (!validarInfo(binding.edtEmail.text.toString(),"correo")) {
+            noCumple("correo")
+            control = false
+        }
+        if (!validarInfo(binding.edtNombreUsuario.text.toString(),"nick")) {
+            noCumple("nick")
+            control = false
+        }
+        if (!validarInfo(binding.edtPassword.text.toString(),"clave")) {
+            noCumple("clave")
+            control = false
+        }
+        if (binding.edtConfirmaPasswd.text.toString() != binding.edtPassword.text.toString()) {
+            noCumple("mismaClave")
+            control = false
+        }
+        if (!binding.chbAceptarTyC.isChecked) {
+            noCumple("terminos")
+            control = false
+        }
+        if (control){
+            val rol : String = when (binding.chbRol.isChecked){
+                true -> "Profesor"
+                false -> "Estudiante"
+            }
+            val usuario = User(0,"${binding.edtNombreUsuario.text}"
+                ,"${binding.edtPassword.text}","${binding.edtEmail.text}"
+                ,"${binding.edtNombres.text}","${binding.edtApellidos.text}"
+                , rol)
+            grabarDatos(usuario)
+        }
+    }
+
     private fun validarInfo(entrada: String, tipoDato: String) : Boolean{
         val context = activity?.applicationContext
         var existe: Int = 0
@@ -132,7 +166,8 @@ class RegistroFragment : Fragment() {
                     existe = database.UsersDAO().getUserByNick(entrada).id
                 }
             }
-            return existe == 0
+            sleep(500)
+            return existe != 0
         }
         else{
             var regularExp: String
