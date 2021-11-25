@@ -91,8 +91,10 @@ class RegistroFragment : Fragment() {
     }
 
     private fun iniciar(rol: String) {
-       if (rol == "Profesor"){
-
+        if (rol == "Profesor"){
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragmentContenedorPrincipal,ProfesorFragment::class.java,null,"profesor")
+                ?.commit()
         }else {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.setReorderingAllowed(true)
@@ -104,6 +106,7 @@ class RegistroFragment : Fragment() {
                 )
                 ?.commit()
         }
+        BienvenidaFragment().cerrar()
     }
 
     private fun noCumple(tipoDato: String) {
@@ -127,7 +130,6 @@ class RegistroFragment : Fragment() {
                 val database = context?.let { TuSabesDB.getDataBase(it)}
                 if (database != null){
                     existe = database.UsersDAO().getUserByNick(entrada).id
-                    println("El numero es $existe")
                 }
             }
             return existe == 0
