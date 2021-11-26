@@ -114,62 +114,72 @@ class RegistroFragment : Fragment() {
         Toast.makeText(activity?.applicationContext, mensaje, Toast.LENGTH_LONG).show()
     }
 
-    private fun registrar(){
-        var control: Boolean = true
-        if (!validarInfo(binding.edtNombres.text.toString(),"texto")){
+    private fun registrar() : Boolean{
+        if (binding.edtNombres.text.isNullOrEmpty()
+            ||binding.edtApellidos.text.isNullOrEmpty()
+            ||binding.edtEmail.text.isNullOrEmpty()
+            ||binding.edtNombreUsuario.text.isNullOrEmpty()
+            ||binding.edtPassword.text.isNullOrEmpty()
+            ||binding.edtConfirmaPasswd.text.isNullOrEmpty()){
+                noCumple("todo")
+        }else if (!validarInfo(binding.edtNombres.text.toString(),"texto")){
             noCumple("Nombres")
-            control = false
-        }
-        if (!validarInfo(binding.edtApellidos.text.toString(),"texto")) {
+            return false
+        }else if (!validarInfo(binding.edtApellidos.text.toString(),"texto")) {
             noCumple("Apellidos")
-            control = false
-        }
-        if (!validarInfo(binding.edtEmail.text.toString(),"correo")) {
+            return false
+        }else if (!validarInfo(binding.edtEmail.text.toString(),"correo")) {
             noCumple("correo")
-            control = false
-        }
-        if (!validarInfo(binding.edtNombreUsuario.text.toString(),"nick")) {
+            return false
+        }else if (!validarInfo(binding.edtNombreUsuario.text.toString(),"nick")) {
             noCumple("nick")
-            control = false
-        }
-        if (!validarInfo(binding.edtPassword.text.toString(),"clave")) {
+            return false
+        }else if (!validarInfo(binding.edtPassword.text.toString(),"clave")) {
             noCumple("clave")
-            control = false
-        }
-        if (binding.edtConfirmaPasswd.text.toString() != binding.edtPassword.text.toString()) {
+            return false
+        }else if (binding.edtConfirmaPasswd.text.toString() != binding.edtPassword.text.toString()) {
             noCumple("mismaClave")
-            control = false
-        }
-        if (!binding.chbAceptarTyC.isChecked) {
+            return false
+        }else if (!binding.chbAceptarTyC.isChecked) {
             noCumple("terminos")
-            control = false
-        }
-        if (control){
-            val rol : String = when (binding.chbRol.isChecked){
+            return false
+        }else {
+            val rol: String = when (binding.chbRol.isChecked) {
                 true -> "Profesor"
                 false -> "Estudiante"
             }
-            val usuario = User(0,"${binding.edtNombreUsuario.text}"
-                ,"${binding.edtPassword.text}","${binding.edtEmail.text}"
-                ,"${binding.edtNombres.text}","${binding.edtApellidos.text}"
-                , rol)
+            val usuario = User(
+                0,
+                "${binding.edtNombreUsuario.text}",
+                "${binding.edtPassword.text}",
+                "${binding.edtEmail.text}",
+                "${binding.edtNombres.text}",
+                "${binding.edtApellidos.text}",
+                rol
+            )
             grabarDatos(usuario)
+
         }
+        return true
     }
 
     private fun validarInfo(entrada: String, tipoDato: String) : Boolean{
-        val context = activity?.applicationContext
-        var existe: Int = 0
+
         if (tipoDato == "nick") {
+            val context = activity?.applicationContext
+            var usuario: User
+            var comparadorId = 0
             CoroutineScope(Dispatchers.IO).launch {
                 val database = context?.let { TuSabesDB.getDataBase(it) }
                 if (database != null) {
-                    existe = database.UsersDAO().getUserByNick(entrada).id
-                    println("EL DATO ES $existe")
+                    usuario = database.UsersDAO().getUserByNick(entrada)
+                    if (usuario == null){ comparadorId = 0}else{ comparadorId = usuario.id }
+                    println("EL DATO ES $usuario")
+                    print(database.UsersDAO().getAll())
                 }
             }
             sleep(500)
-            return existe != 0
+            return comparadorId == 0
         } else {
             var regularExp: String
             var patron: Pattern
