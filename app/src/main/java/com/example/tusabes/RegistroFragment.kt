@@ -44,20 +44,25 @@ class RegistroFragment : Fragment() {
 
         binding.tvDeclaracion.setOnClickListener {
             println("Click en Declaración de Privacidad")
+            val tipoHoja = "declaracion"
             parentFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.fragmentPantallaBienvenida,PaginasLegalesFragment::class.java
-                    , bundleOf("tipo" to "declaracion"),"legales")
+                    , null,"legales")
                 .addToBackStack("legales")
                 .commit()
+            parentFragmentManager.setFragmentResult("requestKey", bundleOf("data" to tipoHoja))
         }
 
         binding.tvTerminos.setOnClickListener {
             println("Click en Términos y condiciones")
+            val tipoHoja = "terminos"
+
             parentFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.fragmentPantallaBienvenida,PaginasLegalesFragment::class.java
-                    , bundleOf("tipo" to "terminos"),"legales")
+                    , null,"legales")
                 .addToBackStack("legales")
                 .commit()
+            parentFragmentManager.setFragmentResult("requestKey", bundleOf("data" to tipoHoja))
         }
 
         return binding.root
@@ -174,8 +179,7 @@ class RegistroFragment : Fragment() {
                 if (database != null) {
                     usuario = database.UsersDAO().getUserByNick(entrada)
                     if (usuario == null){ comparadorId = 0}else{ comparadorId = usuario.id }
-                    println("EL DATO ES $usuario")
-                    print(database.UsersDAO().getAll())
+
                 }
             }
             sleep(500)

@@ -24,21 +24,19 @@ class PaginasLegalesFragment : Fragment() {
 
         _binding = FragmentPaginasLegalesBinding.inflate(inflater,container,false)
 
+        parentFragmentManager.setFragmentResultListener("requestKey",this){
+            key, bundle ->
+            val resultado = bundle.getString("data")
+            if (resultado == "declaracion"){
+                binding.tvTitulo.text = getString(R.string.declaracionPrivacidadTitulo)
+                binding.tvContenido.text = getString(R.string.declaracionPrivacidad)
+            }
+            if (resultado == "terminos"){
+                binding.tvTitulo.text = getString(R.string.condicionesUsoTitulo)
+                binding.tvContenido.text = getString(R.string.condicionesUso)
+            }
 
-        /*var tipo: String
-
-        val tvTitulo = fragmento.findViewById<TextView>(R.id.tvTitulo)
-        val tvContenido = fragmento.findViewById<TextView>(R.id.tvContenido)
-        val btnAceptar = fragmento.findViewById<Button>(R.id.btnAceptar)
-
-        if (tipo == "declaracion"){
-            tvTitulo.text = getString(R.string.declaracionPrivacidadTitulo)
-            tvContenido.text = getString(R.string.declaracionPrivacidad)
         }
-        if (tipo == "terminos"){
-            tvTitulo.text = getString(R.string.condicionesUsoTitulo)
-            tvContenido.text = getString(R.string.condicionesUso)
-        }*/
 
         binding.btnAceptar.setOnClickListener { cerrarVentana() }
 
