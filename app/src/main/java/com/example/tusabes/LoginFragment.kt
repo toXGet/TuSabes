@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentLoginBinding
 import com.example.tusabes.model.User
@@ -60,7 +61,7 @@ class LoginFragment : Fragment() {
                         binding.edtNombreUsuario.setText("")
                         binding.edtPassword.setText("")
                     }
-                    val botonRegistro = { _: DialogInterface, _: Int -> registrarse() }
+                    val botonRegistro = { _: DialogInterface, _: Int -> registrarse(usuario) }
                     AlertDialog.Builder(binding.root.context)
                         .setTitle("$usuario No está registrado")
                         .setMessage("No te encuentras registrado en la app")
@@ -76,37 +77,45 @@ class LoginFragment : Fragment() {
                         Toast.LENGTH_LONG
                     ).show()
             }else{
-                    ingresar(loginUser!!.rol)
+                    ingresar(loginUser!!)
             }
         }
     }
 
-    private fun ingresar(rol: String) {
-        if (rol == "Profesor"){
+    private fun ingresar(loginUser: User) {
+        val bundleUser = bundleOf(
+            "id" to loginUser.id,
+            "usuario" to loginUser.usuario,
+            "rol" to loginUser.rol
+        )
+        if (loginUser.rol == "Profesor"){
             activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragmentContenedorPrincipal,ProfesorFragment::class.java,null,"profesor")
+                ?.setReorderingAllowed(true)
+                ?.replace(R.id.fragmentContenedorPrincipal,
+                    ProfesorFragment::class.java,null,"profesor")
                 ?.commit()
+            activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
         }else {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.setReorderingAllowed(true)
-                ?.replace(
-                    R.id.fragmentContenedorPrincipal,
-                    EstudianteFragment::class.java,
-                    null,
-                    "estudiante"
-                )
+                ?.replace(R.id.fragmentContenedorPrincipal,
+                    EstudianteFragment::class.java,null,"estudiante")
                 ?.commit()
+            activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
         }
         BienvenidaFragment().cerrar()
 
     }
 
-    private fun registrarse() {
+    private fun registrarse(nombre: String) {
+        val bundleUser = bundleOf("usuario" to nombre)
         parentFragmentManager
             .beginTransaction()
             .setReorderingAllowed(true)
             .replace(R.id.fragmentPantallaBienvenida,RegistroFragment::class.java,null,"registro_login")
             .commit()
+        parentFragmentManager.setFragmentResult("requestKey", bundleUser)
+
         //BienvenidaFragment().hideButtons("registro")
     }
 }
