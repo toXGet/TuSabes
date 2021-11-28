@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="20dp">
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,6 +147,12 @@
             android:orientation="horizontal"
             android:layout_margin="10dp"
             android:gravity="center">
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEditarPregunta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sw_editar_pregunta"
+                android:layout_marginHorizontal="10dp"/>
             <ImageButton
                 android:id="@+id/btnActualizarPregunta"
                 android:layout_width="wrap_content"
@@ -155,7 +161,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:src="@android:drawable/ic_menu_save"
                 android:backgroundTint="@color/teal_700"
-                android:tooltipText="@string/btn_actualizar_pregunta"/>
+                android:tooltipText="@string/btn_actualizar_pregunta"
+                android:visibility="gone"/>
             <ImageButton
                 android:id="@+id/btnEliminarPregunta"
                 android:layout_width="wrap_content"

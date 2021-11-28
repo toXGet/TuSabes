@@ -65,7 +65,7 @@
     <string name="btn_actualizar_pregunta">Actualizar</string>
     <string name="btn_eliminar_pregunta">Eliminar</string>
     <string name="btn_volver_pregunta">Volver</string>
-
+    <string name="sw_editar_pregunta">Editar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
