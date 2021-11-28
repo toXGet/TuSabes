@@ -52,6 +52,20 @@
     <string name="tab_item_preguntas">Preguntas</string>
     <string name="tab_item_pruebas">Pruebas</string>
     <string name="btn_create_pregunta">Crear una Pregunta nueva</string>
+    <string name="pregunta_enunciado">Enunciado de la Pregunta</string>
+    <string name="pregunta_opcion_1">Opción 1</string>
+    <string name="pregunta_opcion_2">Opción 2</string>
+    <string name="pregunta_opcion_3">Opción 3</string>
+    <string name="pregunta_opcion_4">Opción 4</string>
+    <string name="pregunta_opcion_5">Opción 5</string>
+    <string name="pregunta_respuesta">Respuesta Correcta (el número)</string>
+    <string name="pregunta_categoria">Categoría</string>
+    <string name="btn_guardar_pregunta">Guardar</string>
+    <string name="btn_cancelar_pregunta">Cancelar</string>
+    <string name="btn_actualizar_pregunta">Actualizar</string>
+    <string name="btn_eliminar_pregunta">Eliminar</string>
+    <string name="btn_volver_pregunta">Volver</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

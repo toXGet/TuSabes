@@ -19,7 +19,12 @@ class PreguntasAdapter(private val mContext: Context, val listaPreguntas: List<P
         val tvTexto = layout.findViewById<TextView>(R.id.tvTextoPregunta)
         val tvCategoria = layout.findViewById<TextView>(R.id.tvCategoriaPregunta)
 
-        tvTexto.text = pregunta.enunciado
+        if (pregunta.enunciado.length > 15) {
+            tvTexto.text = "${pregunta.enunciado.subSequence(0..15)}..."
+        }else {
+            tvTexto.text = pregunta.enunciado
+        }
+
         tvCategoria.text = "${pregunta.idCategoria}"
 
         return layout

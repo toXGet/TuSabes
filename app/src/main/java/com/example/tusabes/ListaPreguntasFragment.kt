@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.example.tusabes.database.TuSabesDB
@@ -22,7 +23,7 @@ class ListaPreguntasFragment : Fragment() {
     private var _binding: FragmentListaPreguntasBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var listaPreguntas: ArrayList<Pregunta>
+    //private lateinit var listaPreguntas: ArrayList<Pregunta>
     private lateinit var preguntasAdapter: ArrayAdapter<Pregunta>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,20 +38,35 @@ class ListaPreguntasFragment : Fragment() {
 
         _binding = FragmentListaPreguntasBinding.inflate(inflater,container,false)
 
-        listaPreguntas = ArrayList<Pregunta>()
+
 
         mostrarPreguntas()
+
+        binding.btnAnadirPregunta.setOnClickListener {
+            ocultarLista()
+            childFragmentManager.beginTransaction().setReorderingAllowed(true)
+                .replace(R.id.fragmentPreguntaNueva,
+                    AddPreguntaFragment::class.java,null,"pregunta")
+                .commit()
+            childFragmentManager.setFragmentResult("requestKey", bundleOf("key" to "nueva"))
+        }
 
 
         return binding.root
     }
 
+    private fun ocultarLista() {
+        binding.lvListaPreguntas.visibility = View.GONE
+        binding.btnAnadirPregunta.visibility = View.GONE
+    }
+
     private fun mostrarPreguntas() {
+        var listaPreguntas = emptyList<Pregunta>()
 
             val database = TuSabesDB.getDataBase(binding.root.context)
             if (database != null){
                 database.PreguntasDAO().getAll().observe({ lifecycle }, {
-                    listaPreguntas
+                    listaPreguntas=it
                     preguntasAdapter = PreguntasAdapter(binding.root.context,listaPreguntas)
                     binding.lvListaPreguntas.adapter = preguntasAdapter
                 })
