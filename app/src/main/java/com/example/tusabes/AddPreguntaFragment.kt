@@ -60,8 +60,6 @@ class AddPreguntaFragment : Fragment() {
             }
         }
 
-
-
         binding.btnGuardarPregunta.setOnClickListener { guardarPreguntaNueva() }
         binding.btnCancelarPregunta.setOnClickListener { cerrarVista() }
 
@@ -71,14 +69,10 @@ class AddPreguntaFragment : Fragment() {
 
         binding.swEditarPregunta.setOnClickListener { activarEdicion() }
 
-
-
         //setSpinnerData()
-
 
         return binding.root
     }
-
 
     /* private fun setSpinnerData() {
          val database = TuSabesDB.getDataBase(binding.root.context)
@@ -88,11 +82,8 @@ class AddPreguntaFragment : Fragment() {
                  categoriasAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
                  binding.spinPreguntaCategoria.adapter = categoriasAdapter
                  binding.spinPreguntaCategoria.onItemSelectedListener
-
-
              })
          }
-
      }*/
 
     private fun guardarPreguntaNueva() {

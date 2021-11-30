@@ -66,6 +66,13 @@ class EstudianteFragment : Fragment() {
 
         binding.btnSalir.setOnClickListener { activity?.finish() }
 
+        binding.tvNombreEstudiante.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.fragmentContenedorEstudiante,
+                ListaCategoriasFragment::class.java,null,"categorias")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
+
         return binding.root
     }
 

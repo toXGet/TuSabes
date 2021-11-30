@@ -66,6 +66,9 @@
     <string name="btn_eliminar_pregunta">Eliminar</string>
     <string name="btn_volver_pregunta">Volver</string>
     <string name="sw_editar_pregunta">Editar</string>
+    <string name="btn_anadir_categoria">Añadir</string>
+    <string name="cat_id">Id Categoría (Para Testing)</string>
+    <string name="nombre_categoria">Nombre de La Categoría</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

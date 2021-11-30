@@ -27,4 +27,7 @@ interface CategoriaDAO {
     // cru(D)
     @Delete
     fun eliminar(categoria: Categoria)
+
+    // Transacción para definir las relaciones con preguntas
+    //@Transaction
 }

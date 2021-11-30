@@ -1,14 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
     tools:context=".ListaCategoriasFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swEditarCategoria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sw_editar_pregunta"
+        android:layout_marginHorizontal="10dp"
+        android:layout_gravity="end"/>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/btnNuevaCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_anadir_categoria"
+                android:layout_marginHorizontal="10dp"
+                android:src="@android:drawable/ic_menu_add"
+                android:backgroundTint="@color/teal_200"
+                android:tooltipText="@string/btn_anadir_categoria"
+                />
+            <ImageButton
+                android:id="@+id/btnActualizarCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_actualizar_pregunta"
+                android:layout_marginHorizontal="10dp"
+                android:src="@android:drawable/ic_menu_save"
+                android:backgroundTint="@color/teal_700"
+                android:tooltipText="@string/btn_actualizar_pregunta"
+                />
+            <ImageButton
+                android:id="@+id/btnEliminarCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_eliminar_pregunta"
+                android:layout_marginHorizontal="10dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:backgroundTint="@color/red_700"
+                android:tooltipText="@string/btn_eliminar_pregunta"/>
+            <ImageButton
+                android:id="@+id/btnVolverCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_volver_pregunta"
+                android:layout_marginHorizontal="10dp"
+                android:src="@android:drawable/ic_menu_revert"
+                android:backgroundTint="@color/blue_700"
+                android:tooltipText="@string/btn_volver_pregunta"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/cat_id"
+                android:layout_margin="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtIdCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nombre_categoria"
+                android:layout_margin="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNombreCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        <Spinner
+            android:id="@+id/spinnerCategoriaHid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:spinnerMode="dropdown"
+            tools:listitem="@layout/support_simple_spinner_dropdown_item"/>
+        </LinearLayout>
 
-</FrameLayout>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/lvListaCategorias"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
