@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentListaCategoriasBinding
@@ -12,6 +13,7 @@ import com.example.tusabes.model.Categoria
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import java.lang.Thread.sleep
 
 class ListaCategoriasFragment : Fragment() {
@@ -54,12 +56,36 @@ class ListaCategoriasFragment : Fragment() {
         }
 
 
+
+        binding.spinnerCategoriaHid.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                var categoria = Categoria(0,"")
+                CoroutineScope(Dispatchers.IO).launch {
+                    val context = activity?.applicationContext
+                    val database = context?.let { TuSabesDB.getDataBase(it)}
+                    categoria = database?.CategoriasDAO()?.getCategoria(listaCategorias[position].id)!!
+                }
+                sleep(250)
+                binding.edtIdCategoria.setText(categoria.id.toString())
+                binding.edtNombreCategoria.setText(categoria.nombre)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+
+            }
+
+        }
+
+
         /*var categorias = ArrayList<String>()
         var adaptador = ArrayAdapter<String>(binding.root.context,
             R.layout.support_simple_spinner_dropdown_item,categorias)*/
-
-
-
 
         return binding.root
     }
@@ -113,6 +139,12 @@ class ListaCategoriasFragment : Fragment() {
                 listaCategorias = it
                 categoriasAdapter = CategoriasAdapter(binding.root.context,listaCategorias)
                 binding.lvListaCategorias.adapter = categoriasAdapter
+
+                //binding.spinnerCategoriaHid.adapter = categoriasAdapter
+                //var adaptadorSpin = ArrayAdapter<Categoria>(binding.root.context,R.layout.categorias_list_item,R.id.tvNomCat,listaCategorias)
+                //binding.spinnerCategoriaHid.adapter = adaptadorSpin
+                var adaptadorSpin = CategoriasSpinnerAdapter(binding.root.context, listaCategorias)
+                binding.spinnerCategoriaHid.adapter = adaptadorSpin
             })
         }
     }

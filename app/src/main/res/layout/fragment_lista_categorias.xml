@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:spinnerMode="dropdown"
-            tools:listitem="@layout/support_simple_spinner_dropdown_item"/>
+            tools:listitem="@layout/categorias_list_item"/>
         </LinearLayout>
 
     </LinearLayout>
