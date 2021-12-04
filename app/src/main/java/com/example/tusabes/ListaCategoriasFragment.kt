@@ -21,7 +21,7 @@ class ListaCategoriasFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var listaCategorias = emptyList<Categoria>()
-    private lateinit var categoriasAdapter: ArrayAdapter<Categoria>
+    //private lateinit var categoriasAdapter: ArrayAdapter<Categoria>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class ListaCategoriasFragment : Fragment() {
 
         binding.swEditarCategoria.setOnClickListener { activarEdicion() }
 
-        binding.lvListaCategorias.setOnItemClickListener { parent, view, position, id ->
+        /*binding.lvListaCategorias.setOnItemClickListener { parent, view, position, id ->
             var categoria = Categoria(0,"")
             CoroutineScope(Dispatchers.IO).launch {
                 val context = activity?.applicationContext
@@ -53,9 +53,7 @@ class ListaCategoriasFragment : Fragment() {
             sleep(250)
             binding.edtIdCategoria.setText(categoria.id.toString())
             binding.edtNombreCategoria.setText(categoria.nombre)
-        }
-
-
+        }*/
 
         binding.spinnerCategoriaHid.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
@@ -74,23 +72,17 @@ class ListaCategoriasFragment : Fragment() {
                 binding.edtIdCategoria.setText(categoria.id.toString())
                 binding.edtNombreCategoria.setText(categoria.nombre)
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
 
             }
 
         }
 
-
-        /*var categorias = ArrayList<String>()
-        var adaptador = ArrayAdapter<String>(binding.root.context,
-            R.layout.support_simple_spinner_dropdown_item,categorias)*/
-
         return binding.root
     }
 
     private fun activarEdicion() {
+        binding.edtIdCategoria.isEnabled = (binding.swEditarCategoria.isChecked)
         binding.edtNombreCategoria.isEnabled = (binding.swEditarCategoria.isChecked)
     }
 
@@ -137,8 +129,8 @@ class ListaCategoriasFragment : Fragment() {
         if (database != null){
             database.CategoriasDAO().getAll().observe({ lifecycle },{
                 listaCategorias = it
-                categoriasAdapter = CategoriasAdapter(binding.root.context,listaCategorias)
-                binding.lvListaCategorias.adapter = categoriasAdapter
+                //categoriasAdapter = CategoriasAdapter(binding.root.context,listaCategorias)
+                //binding.lvListaCategorias.adapter = categoriasAdapter
 
                 //binding.spinnerCategoriaHid.adapter = categoriasAdapter
                 //var adaptadorSpin = ArrayAdapter<Categoria>(binding.root.context,R.layout.categorias_list_item,R.id.tvNomCat,listaCategorias)

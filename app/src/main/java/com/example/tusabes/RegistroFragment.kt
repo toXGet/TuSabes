@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentRegistroBinding
 import com.example.tusabes.model.User
@@ -38,9 +39,24 @@ class RegistroFragment : Fragment() {
 
         _binding = FragmentRegistroBinding.inflate(inflater,container,false)
 
+        childFragmentManager.setFragmentResultListener("requestKey",this){
+            key, bundle ->
+            println(bundle.getString("usuario"))
+            if (!bundle.isEmpty) {
+                binding.edtNombreUsuario.append(bundle.getString("usuario"))
+            }
+            println("DENTRO DEL FRAGMENTO")
+        }
+
         binding.btnRegistro.setOnClickListener {
             registrar()
         }
+
+        var nombreLogin = this.arguments?.getString("usuario")
+        if (!nombreLogin.isNullOrEmpty()){
+            binding.edtNombreUsuario.setText(nombreLogin)
+            println("EL NOMBRE-LOGIN ${nombreLogin}")
+        }else{ println("${nombreLogin} siempre está nulo o vacío")}
 
         binding.tvDeclaracion.setOnClickListener {
             println("Click en Declaración de Privacidad")

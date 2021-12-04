@@ -75,7 +75,8 @@
                     android:id="@+id/edtIdCategoria"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -86,7 +87,8 @@
                     android:id="@+id/edtNombreCategoria"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
         <Spinner
             android:id="@+id/spinnerCategoriaHid"
@@ -101,5 +103,6 @@
     <ListView
         android:id="@+id/lvListaCategorias"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </LinearLayout>

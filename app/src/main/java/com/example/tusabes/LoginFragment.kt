@@ -112,9 +112,9 @@ class LoginFragment : Fragment() {
         parentFragmentManager
             .beginTransaction()
             .setReorderingAllowed(true)
-            .replace(R.id.fragmentPantallaBienvenida,RegistroFragment::class.java,null,"registro_login")
+            .replace(R.id.fragmentPantallaBienvenida,RegistroFragment::class.java,bundleUser,"registro_login")
             .commit()
-        parentFragmentManager.setFragmentResult("requestKey", bundleUser)
+        //parentFragmentManager.setFragmentResult("requestKey", bundleUser)
 
         //BienvenidaFragment().hideButtons("registro")
     }

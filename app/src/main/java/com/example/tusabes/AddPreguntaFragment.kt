@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentAddPreguntaBinding
 import com.example.tusabes.model.Categoria
@@ -24,11 +21,8 @@ class AddPreguntaFragment : Fragment() {
     private var _binding: FragmentAddPreguntaBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var listaCategorias: ArrayList<Categoria>
-    private lateinit var categoriasAdapter: ArrayAdapter<Categoria>
-
+    private var listaCategorias = emptyList<Categoria>()
     private var idPregunta: Int = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +35,10 @@ class AddPreguntaFragment : Fragment() {
     ): View? {
         _binding = FragmentAddPreguntaBinding.inflate(inflater,container,false)
 
+        mostrarCategorias()
+
         idPregunta = requireArguments().getInt("id")
         if (idPregunta != 0){ verPregunta(idPregunta) }
-
-        listaCategorias = ArrayList<Categoria>()
 
         parentFragmentManager.setFragmentResultListener("requestKey",this) { key, bundle ->
             when (bundle.getString("key")) {
@@ -69,22 +63,42 @@ class AddPreguntaFragment : Fragment() {
 
         binding.swEditarPregunta.setOnClickListener { activarEdicion() }
 
-        //setSpinnerData()
-
         return binding.root
     }
 
-    /* private fun setSpinnerData() {
-         val database = TuSabesDB.getDataBase(binding.root.context)
-         if (database != null){
-             database.CategoriasDAO().getAll().observe(viewLifecycleOwner ,{
-                 listaCategorias=it
-                 categoriasAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-                 binding.spinPreguntaCategoria.adapter = categoriasAdapter
-                 binding.spinPreguntaCategoria.onItemSelectedListener
-             })
-         }
-     }*/
+    private fun mostrarCategorias() {
+        val database = TuSabesDB.getDataBase(binding.root.context)
+        if (database != null){
+            database.CategoriasDAO().getAll().observe({ lifecycle },{
+                listaCategorias = it
+                var adaptadorSpin = CategoriasSpinnerAdapter(binding.root.context, listaCategorias)
+                binding.spinPreguntaCategoria.adapter = adaptadorSpin
+            })
+        }
+        binding.spinPreguntaCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                /*var categoria = Categoria(0,"")
+                CoroutineScope(Dispatchers.IO).launch {
+                    val context = activity?.applicationContext
+                    val database = context?.let { TuSabesDB.getDataBase(it)}
+                    categoria = database?.CategoriasDAO()?.getCategoria(listaCategorias[position].id)!!
+                }
+                sleep(250)
+                binding.edtIdCategoria.setText(categoria.id.toString())
+                binding.edtNombreCategoria.setText(categoria.nombre)*/
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
+
+    }
 
     private fun guardarPreguntaNueva() {
         val context = activity?.applicationContext
@@ -96,7 +110,7 @@ class AddPreguntaFragment : Fragment() {
             binding.edtPreguntaOp4.text.toString(),
             binding.edtPreguntaOp5.text.toString(),
             binding.edtPreguntaRespuesta.text.toString().toInt(),
-            1//binding.spinPreguntaCategoria.selectedItemPosition
+            1//binding.spinPreguntaCategoria.selectedItem.id
         )
         CoroutineScope(Dispatchers.IO).launch {
             val database = context?.let { TuSabesDB.getDataBase(it)}
