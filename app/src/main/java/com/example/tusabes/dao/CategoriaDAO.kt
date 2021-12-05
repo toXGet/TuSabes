@@ -3,6 +3,7 @@ package com.example.tusabes.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.tusabes.model.Categoria
+import com.example.tusabes.model.CategoriaPregunta
 
 @Dao
 interface CategoriaDAO {
@@ -13,6 +14,9 @@ interface CategoriaDAO {
     // c(R)ud
     @Query("SELECT * FROM categoria")
     fun getAll() : LiveData<List<Categoria>>
+
+    @Query("SELECT * FROM categoria")
+    fun getAllAsync() : List<Categoria>
 
     @Query("SELECT * FROM categoria WHERE id = :id")
     fun getCategoria(id: Int) : Categoria
@@ -29,5 +33,7 @@ interface CategoriaDAO {
     fun eliminar(categoria: Categoria)
 
     // Transacción para definir las relaciones con preguntas
-    //@Transaction
+    @Transaction
+    @Query("SELECT * FROM categoria WHERE id = :idCategoria")
+    fun getPreguntas(idCategoria: Int): List<CategoriaPregunta>
 }

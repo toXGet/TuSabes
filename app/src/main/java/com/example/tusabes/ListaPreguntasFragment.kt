@@ -12,10 +12,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentListaPreguntasBinding
+import com.example.tusabes.model.Categoria
 import com.example.tusabes.model.Pregunta
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.security.acl.Owner
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,6 +28,7 @@ class ListaPreguntasFragment : Fragment() {
 
     //private lateinit var listaPreguntas: ArrayList<Pregunta>
     var listaPreguntas = emptyList<Pregunta>()
+    var listaCategorias = emptyList<Categoria>()
     private lateinit var preguntasAdapter: ArrayAdapter<Pregunta>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,14 +73,32 @@ class ListaPreguntasFragment : Fragment() {
     }
 
     private fun mostrarPreguntas() {
+        var categorias = categoriasParaLista()
+        println("MOSTRAR PREGUNTAS ${categorias}")
         val database = TuSabesDB.getDataBase(binding.root.context)
         if (database != null){
             database.PreguntasDAO().getAll().observe({ lifecycle }, {
                 listaPreguntas=it
-                preguntasAdapter = PreguntasAdapter(binding.root.context,listaPreguntas)
+                preguntasAdapter = PreguntasAdapter(binding.root.context, listaPreguntas, categorias)
                 binding.lvListaPreguntas.adapter = preguntasAdapter
             })
         }
     }
+    private fun categoriasParaLista() : List<Categoria>{
+        /*val database = TuSabesDB.getDataBase(binding.root.context)
+        if (database != null){
+            listaCategorias = database.CategoriasDAO().getAll().
+            println("${listaCategorias}")
+        }*/
+        runBlocking(Dispatchers.IO) {
+            val context = activity?.applicationContext
+            val database = context?.let { TuSabesDB.getDataBase(it) }
+            listaCategorias = database?.CategoriasDAO()?.getAllAsync()!!
+            println("Dentro de la corrutina ${listaCategorias}")
+        }
+        println("Fuera de la corrutina ${listaCategorias}")
+        return listaCategorias
 
+
+    }
 }

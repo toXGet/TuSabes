@@ -27,4 +27,8 @@ interface PreguntaDAO {
     // cru(D)
     @Delete
     fun eliminar(pregunta: Pregunta)
+
+    // Aca comienza la query de implementación de Enunciado Categoria
+    //@Query("SELECT p.enunciado, c.nombre FROM categoria c INNER JOIN pregunta p ON c.id = p.idCategoria WHERE c.id = :idCategoria")
+    //fun getEnunciadoCategoria(idCategoria: Int): List<EnunciadoCategoriaDTO>
 }

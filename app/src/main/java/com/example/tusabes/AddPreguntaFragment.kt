@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.os.bundleOf
+import androidx.core.view.iterator
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentAddPreguntaBinding
 import com.example.tusabes.model.Categoria
@@ -22,6 +24,7 @@ class AddPreguntaFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var listaCategorias = emptyList<Categoria>()
+    private var categoriaDesdeSpinner = 0
     private var idPregunta: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +76,7 @@ class AddPreguntaFragment : Fragment() {
                 listaCategorias = it
                 var adaptadorSpin = CategoriasSpinnerAdapter(binding.root.context, listaCategorias)
                 binding.spinPreguntaCategoria.adapter = adaptadorSpin
+
             })
         }
         binding.spinPreguntaCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -82,15 +86,9 @@ class AddPreguntaFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                /*var categoria = Categoria(0,"")
-                CoroutineScope(Dispatchers.IO).launch {
-                    val context = activity?.applicationContext
-                    val database = context?.let { TuSabesDB.getDataBase(it)}
-                    categoria = database?.CategoriasDAO()?.getCategoria(listaCategorias[position].id)!!
-                }
-                sleep(250)
-                binding.edtIdCategoria.setText(categoria.id.toString())
-                binding.edtNombreCategoria.setText(categoria.nombre)*/
+                categoriaDesdeSpinner = binding.spinPreguntaCategoria.adapter.getItemId(position).toInt()
+                println("ON ITEM SELECTED ${binding.spinPreguntaCategoria.selectedItem}")
+
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -110,8 +108,9 @@ class AddPreguntaFragment : Fragment() {
             binding.edtPreguntaOp4.text.toString(),
             binding.edtPreguntaOp5.text.toString(),
             binding.edtPreguntaRespuesta.text.toString().toInt(),
-            1//binding.spinPreguntaCategoria.selectedItem.id
+            categoriaDesdeSpinner
         )
+        println("GUARDAR NUEVA ${categoriaDesdeSpinner}")
         CoroutineScope(Dispatchers.IO).launch {
             val database = context?.let { TuSabesDB.getDataBase(it)}
             if (database != null) {
@@ -140,7 +139,7 @@ class AddPreguntaFragment : Fragment() {
         }
 
         sleep(500)
-        //binding.spinPreguntaCategoria.setSelection(pregunta.idCategoria)
+        binding.spinPreguntaCategoria.setSelection(pregunta.idCategoria)
         binding.edtPreguntaEnunciado.setText(pregunta.enunciado)
         binding.edtPreguntaOp1.setText(pregunta.opcion1)
         binding.edtPreguntaOp2.setText(pregunta.opcion2)
@@ -148,6 +147,7 @@ class AddPreguntaFragment : Fragment() {
         binding.edtPreguntaOp4.setText(pregunta.opcion4)
         binding.edtPreguntaOp5.setText(pregunta.opcion5)
         binding.edtPreguntaRespuesta.setText(pregunta.respuesta.toString())
+        println("VER PREGUNTA LA CATEGORIA ES ${pregunta.idCategoria} Y EL SPINNER ESTA EN ${binding.spinPreguntaCategoria.selectedItem}")
     }
 
     private fun eliminarPregunta(idPregunta: Int) {
@@ -188,8 +188,9 @@ class AddPreguntaFragment : Fragment() {
                 "${binding.edtPreguntaOp4.text}",
                 "${binding.edtPreguntaOp5.text}",
                 binding.edtPreguntaRespuesta.text.toString().toInt(),
-                1 //binding.spinPreguntaCategoria.id
+                categoriaDesdeSpinner
             )
+            println("ACTUALIZA CON EL NUMERO ${categoriaDesdeSpinner}")
             val database = context?.let { TuSabesDB.getDataBase(it) }
             database?.PreguntasDAO()?.actualizar(pregunta)
         }
@@ -221,4 +222,21 @@ class AddPreguntaFragment : Fragment() {
 
         parentFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
+
+    /*private fun setValorCategoriaSpinner(idCategoria: Int){
+        println("ANTES DEL FOR: items en spinner : ${adaptadorSpinner.count}")
+        println("ANTES DEL FOR: Cual es el numero de la categoria al comienzo: ${categoriaDesdeSpinner}")
+
+        for (i in 1..adaptadorSpinner.count){
+            if (idCategoria == binding.spinPreguntaCategoria.adapter.getItemId(i).toInt()){
+                binding.spinPreguntaCategoria.setSelection(i,true)
+                println("SET VALOR ID ES: ${idCategoria}, ITERADOR ES: ${i}, SPINNER QUEDA EN: ${binding.spinPreguntaCategoria.selectedItem}")
+            }else{
+                println("NO ESTÁ HACIENDO NADA")
+            }
+            println("EN EL FOR: ID AT POSITION: ${binding.spinPreguntaCategoria.getItemIdAtPosition(i)}")
+            println("EN EL FOR: POSITION: ${binding.spinPreguntaCategoria.getItemAtPosition(i)}")
+        }
+
+    }*/
 }
