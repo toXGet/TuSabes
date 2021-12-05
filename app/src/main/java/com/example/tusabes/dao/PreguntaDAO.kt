@@ -14,6 +14,9 @@ interface PreguntaDAO {
     @Query("SELECT * FROM pregunta")
     fun getAll() : LiveData<List<Pregunta>>
 
+    @Query("SELECT * FROM pregunta")
+    fun getAllAsync() : List<Pregunta>
+
     @Query("SELECT * FROM pregunta WHERE id = :id")
     fun getPregunta(id: Int) : Pregunta
 
