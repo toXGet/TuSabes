@@ -13,6 +13,7 @@ import com.example.tusabes.model.Categoria
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.selects.select
 import java.lang.Thread.sleep
 
@@ -39,7 +40,6 @@ class ListaCategoriasFragment : Fragment() {
         binding.btnNuevaCategoria.setOnClickListener { crearCategoria() }
         binding.btnActualizarCategoria.setOnClickListener { actualizarCategoria() }
         binding.btnEliminarCategoria.setOnClickListener { eliminarCategoria() }
-        binding.btnVolverCategoria.setOnClickListener { volverFragmentoAnterior() }
 
         binding.swEditarCategoria.setOnClickListener { activarEdicion() }
 
@@ -63,12 +63,12 @@ class ListaCategoriasFragment : Fragment() {
                 id: Long
             ) {
                 var categoria = Categoria(0,"")
-                CoroutineScope(Dispatchers.IO).launch {
+                runBlocking(Dispatchers.IO) {
                     val context = activity?.applicationContext
                     val database = context?.let { TuSabesDB.getDataBase(it)}
                     categoria = database?.CategoriasDAO()?.getCategoria(listaCategorias[position].id)!!
                 }
-                sleep(250)
+
                 binding.edtIdCategoria.setText(categoria.id.toString())
                 binding.edtNombreCategoria.setText(categoria.nombre)
             }
@@ -118,10 +118,6 @@ class ListaCategoriasFragment : Fragment() {
             )
             database?.CategoriasDAO()?.eliminar(categoria)
         }
-    }
-
-    private fun volverFragmentoAnterior() {
-
     }
 
     private fun mostrarListaCategorias() {

@@ -31,9 +31,6 @@ class PreguntasAdapter(private val mContext: Context, val listaPreguntas: List<P
                 tvCategoria.text = "${iter.nombre}"
             }
         }
-
-        //tvCategoria.text = "${pregunta.idCategoria}"
-
         return layout
     }
 }

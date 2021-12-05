@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.tusabes.database.TuSabesDB
@@ -18,6 +19,7 @@ class EstudianteFragment : Fragment() {
     private var _binding: FragmentEstudianteBinding? = null
     private val binding get() = _binding!!
     var fragmento: Fragment? = null
+    var myId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +37,11 @@ class EstudianteFragment : Fragment() {
             key, bundle ->
             binding.tvNombreEstudiante.text = bundle.getString("usuario")
             binding.tvRolEstudiante.text = bundle.getString("rol")
+            myId = bundle.getInt("id")
         }
 
         parentFragmentManager.beginTransaction().replace(R.id.fragmentContenedorEstudiante,
-            ListaPreguntasFragment::class.java,null,"preguntas")
+            ListaPreguntasFragment::class.java, bundleOf("id" to myId),"preguntas")
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
 
@@ -46,10 +49,10 @@ class EstudianteFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position){
                     0 -> fragmento = ListaPreguntasFragment()
-                    1 -> fragmento = ListaCategoriasFragment()
+                    1 -> fragmento = ListaPruebasFragment()
                 }
                 parentFragmentManager.beginTransaction().replace(R.id.fragmentContenedorEstudiante,
-                    fragmento!!::class.java,null,"cambio fragmentos")
+                    fragmento!!::class.java,bundleOf("id" to myId),"cambio fragmentos")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit()
             }
@@ -64,14 +67,14 @@ class EstudianteFragment : Fragment() {
 
         })
 
-        binding.btnSalir.setOnClickListener { activity?.finish() }
+        binding.btnSalirEstudiante.setOnClickListener { activity?.finish() }
 
-        binding.tvNombreEstudiante.setOnClickListener {
+        /*binding.tvNombreEstudiante.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.fragmentContenedorEstudiante,
                 ListaCategoriasFragment::class.java,null,"categorias")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit()
-        }
+        }*/
 
         return binding.root
     }

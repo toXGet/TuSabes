@@ -74,7 +74,6 @@ class ListaPreguntasFragment : Fragment() {
 
     private fun mostrarPreguntas() {
         var categorias = categoriasParaLista()
-        println("MOSTRAR PREGUNTAS ${categorias}")
         val database = TuSabesDB.getDataBase(binding.root.context)
         if (database != null){
             database.PreguntasDAO().getAll().observe({ lifecycle }, {
@@ -84,21 +83,13 @@ class ListaPreguntasFragment : Fragment() {
             })
         }
     }
+
     private fun categoriasParaLista() : List<Categoria>{
-        /*val database = TuSabesDB.getDataBase(binding.root.context)
-        if (database != null){
-            listaCategorias = database.CategoriasDAO().getAll().
-            println("${listaCategorias}")
-        }*/
         runBlocking(Dispatchers.IO) {
             val context = activity?.applicationContext
             val database = context?.let { TuSabesDB.getDataBase(it) }
             listaCategorias = database?.CategoriasDAO()?.getAllAsync()!!
-            println("Dentro de la corrutina ${listaCategorias}")
         }
-        println("Fuera de la corrutina ${listaCategorias}")
         return listaCategorias
-
-
     }
 }

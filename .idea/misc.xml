@@ -12,11 +12,14 @@
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_legal_scrolling.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_lista_categorias.xml" value="0.22" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_lista_preguntas.xml" value="0.1480978260869565" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_lista_pruebas.xml" value="0.14628623188405798" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_login.xml" value="0.22" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_nueva_prueba.xml" value="0.22" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_paginas_legales.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_profesor.xml" value="0.1693840579710145" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/fragment_registro.xml" value="0.22" />
         <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/preguntas_list_item.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/luisa/AndroidStudioProjects/TuSabes/app/src/main/res/layout/pruebas_list_item.xml" value="0.22" />
       </map>
     </option>
   </component>

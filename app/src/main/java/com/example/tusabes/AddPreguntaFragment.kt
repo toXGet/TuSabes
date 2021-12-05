@@ -17,6 +17,7 @@ import com.example.tusabes.model.Pregunta
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.Thread.sleep
 
 class AddPreguntaFragment : Fragment() {
@@ -57,6 +58,24 @@ class AddPreguntaFragment : Fragment() {
             }
         }
 
+        binding.spinPreguntaCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                categoriaDesdeSpinner = binding.spinPreguntaCategoria.adapter.getItemId(position).toInt()
+                println("ON ITEM SELECTED ${binding.spinPreguntaCategoria.selectedItem}")
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //binding.spinPreguntaCategoria.setSelection(2)
+
+            }
+
+        }
+
         binding.btnGuardarPregunta.setOnClickListener { guardarPreguntaNueva() }
         binding.btnCancelarPregunta.setOnClickListener { cerrarVista() }
 
@@ -79,7 +98,7 @@ class AddPreguntaFragment : Fragment() {
 
             })
         }
-        binding.spinPreguntaCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+       /* binding.spinPreguntaCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -93,9 +112,7 @@ class AddPreguntaFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-
-        }
-
+        }*/
     }
 
     private fun guardarPreguntaNueva() {
@@ -110,7 +127,6 @@ class AddPreguntaFragment : Fragment() {
             binding.edtPreguntaRespuesta.text.toString().toInt(),
             categoriaDesdeSpinner
         )
-        println("GUARDAR NUEVA ${categoriaDesdeSpinner}")
         CoroutineScope(Dispatchers.IO).launch {
             val database = context?.let { TuSabesDB.getDataBase(it)}
             if (database != null) {
@@ -132,14 +148,14 @@ class AddPreguntaFragment : Fragment() {
 
         var pregunta = Pregunta(0,"","","","","","",0,0)
 
-        CoroutineScope(Dispatchers.IO).launch {
+        runBlocking(Dispatchers.IO){
             val context = activity?.applicationContext
             val database = context?.let { TuSabesDB.getDataBase(it)}
             pregunta = database?.PreguntasDAO()?.getPregunta(idPregunta)!!
         }
 
-        sleep(500)
         binding.spinPreguntaCategoria.setSelection(pregunta.idCategoria)
+        //categoriaDesdeSpinner = pregunta.idCategoria
         binding.edtPreguntaEnunciado.setText(pregunta.enunciado)
         binding.edtPreguntaOp1.setText(pregunta.opcion1)
         binding.edtPreguntaOp2.setText(pregunta.opcion2)
@@ -190,7 +206,6 @@ class AddPreguntaFragment : Fragment() {
                 binding.edtPreguntaRespuesta.text.toString().toInt(),
                 categoriaDesdeSpinner
             )
-            println("ACTUALIZA CON EL NUMERO ${categoriaDesdeSpinner}")
             val database = context?.let { TuSabesDB.getDataBase(it) }
             database?.PreguntasDAO()?.actualizar(pregunta)
         }

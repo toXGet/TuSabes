@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context=".NuevaPruebaFragment">
+
+    <Button
+        android:id="@+id/btnGenerarNuevaPrueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_nueva_prueba"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"/>
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swOpcionesAvanzadas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nueva_prueba_opciones"
+        android:layout_gravity="end"/>
+   <LinearLayout
+       android:id="@+id/llOpcionesAvanzadas"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:visibility="gone">
+       <com.google.android.material.checkbox.MaterialCheckBox
+           android:id="@+id/cbTodasCategorias"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/nueva_prueba_checkbox"
+           android:layout_margin="10dp"
+           android:layout_gravity="center"
+           android:checked="true"/>
+       <com.google.android.material.textview.MaterialTextView
+           android:id="@+id/tvTituloCategorias"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/pregunta_categoria"
+           android:layout_marginHorizontal="10dp"
+           android:textSize="15sp"
+           android:visibility="gone"/>
+       <Spinner
+           android:id="@+id/spinNuevaPruebaCategorias"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:tooltipText="@string/pregunta_categoria"
+           android:layout_marginHorizontal="10dp"
+           android:visibility="gone"/>
+       <com.google.android.material.textfield.TextInputLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="@string/nueva_prueba_cantidad"
+           android:layout_margin="10dp" >
+           <com.google.android.material.textfield.TextInputEditText
+               android:id="@+id/edtCantidadPreguntas"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:inputType="number" />
+       </com.google.android.material.textfield.TextInputLayout>
+   </LinearLayout>
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nueva_prueba_explicacion"
+        android:layout_margin="10dp"/>
+
+
+</LinearLayout>
