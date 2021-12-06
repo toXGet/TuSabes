@@ -80,6 +80,10 @@
         todas las categorías. Para generar una prueba personalizada prende el switch de Opciones
         avanzadas y podrás escoger la categoría de las preguntas así como la cantidad de preguntas.
     </string>
+    <string name="prueba_detalle_titulo">Prueba</string>
+    <string name="btn_presentar_prueba">Presentar</string>
+    <string name="btn_anterior_prueba">Pregunta Anterior</string>
+    <string name="btn_siguiente_prueba">Pregunta Siguiente</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

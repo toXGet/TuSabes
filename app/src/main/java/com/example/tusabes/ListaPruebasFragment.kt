@@ -40,6 +40,13 @@ class ListaPruebasFragment : Fragment() {
                 .commit()
         }
 
+        binding.lvListaPruebas.setOnItemClickListener { parent, view, position, id ->
+            ocultarlista()
+            childFragmentManager.beginTransaction().setReorderingAllowed(true)
+                .replace(R.id.fragmentPruebas,PruebaDetalleFragment::class.java,null,"pruebas")
+                .commit()
+        }
+
 
 
         return binding.root
