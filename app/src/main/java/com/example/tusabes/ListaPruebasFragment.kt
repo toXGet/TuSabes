@@ -65,6 +65,7 @@ class ListaPruebasFragment : Fragment() {
 
     private fun ocultarlista() {
         binding.btnGenerarPrueba.visibility = View.GONE
+        binding.tvTituloPruebas.visibility = View.GONE
         binding.lvListaPruebas.visibility = View.GONE
     }
 

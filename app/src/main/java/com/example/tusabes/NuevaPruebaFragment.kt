@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.tusabes.Convertidores.Companion.toInstant
 import com.example.tusabes.database.TuSabesDB
@@ -19,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.sql.Timestamp
+import java.util.*
 import kotlin.random.Random
 
 class NuevaPruebaFragment : Fragment() {
@@ -28,6 +31,7 @@ class NuevaPruebaFragment : Fragment() {
     private var avanzadas = 0
     private var todasCategorias = 1
     private var numeroPreguntas = 5
+    private var cantidadPreguntas = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +45,36 @@ class NuevaPruebaFragment : Fragment() {
     ): View? {
         _binding = FragmentNuevaPruebaBinding.inflate(inflater,container,false)
 
-        binding.btnGenerarNuevaPrueba.setOnClickListener { generarPrueba() }
+        getCantidadPreguntas()
+        binding.tiTituloCantidad.hint = "${binding.tiTituloCantidad.hint} hasta ${cantidadPreguntas}"
+
+        binding.btnGenerarNuevaPrueba.setOnClickListener {
+            if (avanzadas == 1){
+                numeroPreguntas = binding.edtCantidadPreguntas.text.toString().toInt()
+                if (numeroPreguntas <= 0 || numeroPreguntas >= cantidadPreguntas){
+                    Toast.makeText(binding.root.context,
+                        "La cantidad de preguntas no puede ser menos de 0 ni más de ${cantidadPreguntas}",
+                        Toast.LENGTH_LONG).show()
+                    binding.edtCantidadPreguntas.setText("")
+                }else{ generarPrueba() }
+            }
+            if (avanzadas == 0){ generarPrueba() }
+        }
         binding.swOpcionesAvanzadas.setOnClickListener { activarOpcionesAvanzadas() }
         binding.cbTodasCategorias.setOnClickListener { activarTodasCategorias() }
 
 
 
+
         return binding.root
+    }
+
+    private fun getCantidadPreguntas() {
+        runBlocking(Dispatchers.IO) {
+            val context = activity?.applicationContext
+            val database = context?.let { TuSabesDB.getDataBase(it) }
+            cantidadPreguntas = database?.PreguntasDAO()?.getAllAsync()!!.count()
+        }
     }
 
     private fun activarTodasCategorias() {
@@ -93,7 +120,7 @@ class NuevaPruebaFragment : Fragment() {
 
     private fun getPreguntasYresultados(): String{
         var listaPreguntas = emptyList<Pregunta>()
-        var arraySubproceso = emptyList<Pregunta>()
+        var arraySubproceso = mutableListOf<Pregunta>()
         var preguntas = ""
 
         runBlocking(Dispatchers.IO) {
@@ -102,41 +129,19 @@ class NuevaPruebaFragment : Fragment() {
             listaPreguntas = database?.PreguntasDAO()?.getAllAsync()!!
         }
 
-        for (i in 1..numeroPreguntas){
+        while (arraySubproceso.count() != numeroPreguntas){
             var indiceRandom = Random.nextInt(1, listaPreguntas.count())
-            arraySubproceso.toMutableSet().add(listaPreguntas.get(indiceRandom))
-            listaPreguntas.toMutableSet().remove(listaPreguntas.get(indiceRandom))
-            println("NÚMERO: ${i}")
+            if (listaPreguntas[indiceRandom] != null || listaPreguntas[indiceRandom].id != 0){
+                if(!arraySubproceso.contains(listaPreguntas[indiceRandom])){
+                    arraySubproceso.add(listaPreguntas[indiceRandom])
+                }
+            }
+            println("NUMERO RANDOM: ${indiceRandom} el array es ${arraySubproceso}")
         }
-        for (i in listaPreguntas){
+        for (i in arraySubproceso){
             preguntas = preguntas + i.id.toString() + ":" + i.respuesta.toString() + ","
         }
-
-        /*val database = TuSabesDB.getDataBase(binding.root.context)
-        if (database != null){
-            database.PreguntasDAO().getAll().observe({ lifecycle }, {
-                listaPreguntas=it
-
-                cantidadPreguntas = listaPreguntas.count()
-                var listaIds = generadorRandom(numeroPreguntas, cantidadPreguntas)
-                for (i in listaIds){
-                    listaPreguntas.random()
-                }
-                for (i in listaPreguntas){
-                    preguntas = preguntas + i.id.toString() + ":" + i.respuesta.toString() + ","
-                }
-
-            })
-        }*/
-
-
-
         return preguntas
-    }
-
-    private fun generadorRandom(limite: Int, cantidad: Int): List<Int>{
-        val listaNumeros = List(limite){ Random.nextInt(0,cantidad) }
-        return listaNumeros
     }
 
     private fun cerrarVista() {
@@ -144,9 +149,10 @@ class NuevaPruebaFragment : Fragment() {
         lvPruebas?.visibility = View.VISIBLE
         val btnAnadir = activity?.findViewById<Button>(R.id.btnGenerarPrueba)
         btnAnadir?.visibility = View.VISIBLE
+        val tvTituloGenerar = activity?.findViewById<TextView>(R.id.tvTituloPruebas)
+        tvTituloGenerar?.visibility = View.VISIBLE
 
         parentFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
-
 
 }
