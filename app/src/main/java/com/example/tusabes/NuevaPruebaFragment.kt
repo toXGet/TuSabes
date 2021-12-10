@@ -6,14 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import com.example.tusabes.Convertidores.Companion.toInstant
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentNuevaPruebaBinding
+import com.example.tusabes.model.Categoria
 import com.example.tusabes.model.Pregunta
 import com.example.tusabes.model.Prueba
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +30,9 @@ class NuevaPruebaFragment : Fragment() {
     private var todasCategorias = 1
     private var numeroPreguntas = 5
     private var cantidadPreguntas = 5
+    private var categoria = 1
+
+    private var listaCategorias = emptyList<Categoria>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,10 +83,38 @@ class NuevaPruebaFragment : Fragment() {
             binding.tvTituloCategorias.visibility = View.VISIBLE
             binding.spinNuevaPruebaCategorias.visibility = View.VISIBLE
             todasCategorias = 0
+            mostrarCategorias()
         }else{
             binding.tvTituloCategorias.visibility = View.GONE
             binding.spinNuevaPruebaCategorias.visibility = View.GONE
             todasCategorias = 1
+        }
+    }
+
+    private fun mostrarCategorias() {
+        val database = TuSabesDB.getDataBase(binding.root.context)
+        if (database != null) {
+            database.CategoriasDAO().getAll().observe({ lifecycle }, {
+                listaCategorias = it
+                var adaptadorSpin = CategoriasSpinnerAdapter(binding.root.context, listaCategorias)
+                binding.spinNuevaPruebaCategorias.adapter = adaptadorSpin
+
+            })
+        }
+        binding.spinNuevaPruebaCategorias.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                categoria = binding.spinNuevaPruebaCategorias.adapter.getItemId(position).toInt()
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
         }
     }
 
@@ -123,16 +152,27 @@ class NuevaPruebaFragment : Fragment() {
         var arraySubproceso = mutableListOf<Pregunta>()
         var preguntas = ""
 
-        runBlocking(Dispatchers.IO) {
-            val context = activity?.applicationContext
-            val database = context?.let { TuSabesDB.getDataBase(it) }
-            listaPreguntas = database?.PreguntasDAO()?.getAllAsync()!!
+        if (todasCategorias == 1) {
+            runBlocking(Dispatchers.IO) {
+                val context = activity?.applicationContext
+                val database = context?.let { TuSabesDB.getDataBase(it) }
+                listaPreguntas = database?.PreguntasDAO()?.getAllAsync()!!
+            }
         }
-
-        while (arraySubproceso.count() != numeroPreguntas){
+        if (todasCategorias == 0){
+            runBlocking(Dispatchers.IO) {
+                val context = activity?.applicationContext
+                val database = context?.let { TuSabesDB.getDataBase(it) }
+                listaPreguntas = database?.PreguntasDAO()?.getPreguntaPorCategoria(categoria)!!
+            }
+        }
+        if(numeroPreguntas > listaPreguntas.count()){
+            numeroPreguntas = listaPreguntas.count()
+        }
+        while (arraySubproceso.count() != numeroPreguntas) {
             var indiceRandom = Random.nextInt(1, listaPreguntas.count())
-            if (listaPreguntas[indiceRandom] != null || listaPreguntas[indiceRandom].id != 0){
-                if(!arraySubproceso.contains(listaPreguntas[indiceRandom])){
+            if (listaPreguntas[indiceRandom] != null || listaPreguntas[indiceRandom].id != 0) {
+                if (!arraySubproceso.contains(listaPreguntas[indiceRandom])) {
                     arraySubproceso.add(listaPreguntas[indiceRandom])
                 }
             }
