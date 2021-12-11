@@ -106,6 +106,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tiRespuesta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/pregunta_respuesta"
@@ -152,13 +153,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sw_editar_pregunta"
-                android:layout_marginHorizontal="10dp"/>
+                android:layout_marginHorizontal="5dp"/>
             <ImageButton
                 android:id="@+id/btnActualizarPregunta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_actualizar_pregunta"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 android:src="@android:drawable/ic_menu_save"
                 android:backgroundTint="@color/teal_700"
                 android:tooltipText="@string/btn_actualizar_pregunta"
@@ -168,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_eliminar_pregunta"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 android:src="@android:drawable/ic_menu_delete"
                 android:backgroundTint="@color/red_700"
                 android:tooltipText="@string/btn_eliminar_pregunta"/>
@@ -177,7 +178,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_volver_pregunta"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 android:src="@android:drawable/ic_menu_revert"
                 android:backgroundTint="@color/blue_700"
                 android:tooltipText="@string/btn_volver_pregunta"/>

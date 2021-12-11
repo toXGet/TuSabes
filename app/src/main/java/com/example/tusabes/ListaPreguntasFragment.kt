@@ -30,6 +30,7 @@ class ListaPreguntasFragment : Fragment() {
     var listaPreguntas = emptyList<Pregunta>()
     var listaCategorias = emptyList<Categoria>()
     private lateinit var preguntasAdapter: ArrayAdapter<Pregunta>
+    var paramBundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,23 +43,27 @@ class ListaPreguntasFragment : Fragment() {
 
         _binding = FragmentListaPreguntasBinding.inflate(inflater,container,false)
 
+        paramBundle = requireArguments()
+        if (paramBundle.getString("rol") == "estudiante") {
+            binding.btnAnadirPregunta.visibility = View.GONE
+        }
         mostrarPreguntas()
+        paramBundle.putInt("preguntaId", 0)
 
         binding.btnAnadirPregunta.setOnClickListener {
             ocultarLista()
             childFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.fragmentPreguntaNueva,
-                    AddPreguntaFragment::class.java, bundleOf("id" to 0),"pregunta")
+                    AddPreguntaFragment::class.java, paramBundle,"pregunta")
                 .commit()
             childFragmentManager.setFragmentResult("requestKey", bundleOf("key" to "nueva"))
         }
 
         binding.lvListaPreguntas.setOnItemClickListener { parent, view, position, id ->
             ocultarLista()
-            val pregunta = Bundle()
-            pregunta.putInt("id", listaPreguntas[position].id)
+            paramBundle.putInt("preguntaId", listaPreguntas[position].id)
             childFragmentManager.beginTransaction().setReorderingAllowed(true)
-                .replace(R.id.fragmentPreguntaNueva,AddPreguntaFragment::class.java, pregunta,"pregunta")
+                .replace(R.id.fragmentPreguntaNueva,AddPreguntaFragment::class.java, paramBundle,"pregunta")
                 .commit()
             childFragmentManager.setFragmentResult("requestKey", bundleOf("key" to "actualizar"))
 

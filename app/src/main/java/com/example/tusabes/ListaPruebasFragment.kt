@@ -10,6 +10,8 @@ import androidx.core.os.bundleOf
 import com.example.tusabes.database.TuSabesDB
 import com.example.tusabes.databinding.FragmentListaPruebasBinding
 import com.example.tusabes.model.Prueba
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class ListaPruebasFragment : Fragment() {
     private var _binding: FragmentListaPruebasBinding? = null
@@ -17,7 +19,7 @@ class ListaPruebasFragment : Fragment() {
 
     var listaPruebas = emptyList<Prueba>()
     private lateinit var pruebasAdapter: ArrayAdapter<Prueba>
-
+    private var paramsBundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,20 +32,23 @@ class ListaPruebasFragment : Fragment() {
     ): View? {
         _binding = FragmentListaPruebasBinding.inflate(inflater,container,false)
 
+        paramsBundle = requireArguments()
+
         mostrarPruebas()
 
         binding.btnGenerarPrueba.setOnClickListener {
             ocultarlista()
             childFragmentManager.beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.fragmentPruebas,
-                    NuevaPruebaFragment::class.java, bundleOf("id" to 0),"generar prueba")
+                    NuevaPruebaFragment::class.java, paramsBundle,"generar prueba")
                 .commit()
         }
 
         binding.lvListaPruebas.setOnItemClickListener { parent, view, position, id ->
             ocultarlista()
+            paramsBundle.putInt("idPrueba", listaPruebas[position].id)
             childFragmentManager.beginTransaction().setReorderingAllowed(true)
-                .replace(R.id.fragmentPruebas,PruebaDetalleFragment::class.java,null,"pruebas")
+                .replace(R.id.fragmentPruebas,PruebaDetalleFragment::class.java,paramsBundle,"pruebas")
                 .commit()
         }
 
@@ -53,6 +58,11 @@ class ListaPruebasFragment : Fragment() {
     }
 
     private fun mostrarPruebas() {
+        /*runBlocking(Dispatchers.IO) {
+            val context = activity?.applicationContext
+            val database = context?.let { TuSabesDB.getDataBase(it) }
+            listaPruebas = database?.PruebasDAO()?.getPruebaByUser(paramsBundle.getInt("id"))!!
+        }*/
         val database = TuSabesDB.getDataBase(binding.root.context)
         if (database != null){
             database.PruebasDAO().getAll().observe({ lifecycle }, {

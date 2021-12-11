@@ -31,6 +31,8 @@ class NuevaPruebaFragment : Fragment() {
     private var numeroPreguntas = 5
     private var cantidadPreguntas = 5
     private var categoria = 1
+    private var idUsuario = 0
+
 
     private var listaCategorias = emptyList<Categoria>()
 
@@ -45,6 +47,8 @@ class NuevaPruebaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentNuevaPruebaBinding.inflate(inflater,container,false)
+
+        idUsuario = requireArguments().getInt("id")
 
         getCantidadPreguntas()
         binding.tiTituloCantidad.hint = "${binding.tiTituloCantidad.hint} hasta ${cantidadPreguntas}"
@@ -134,7 +138,7 @@ class NuevaPruebaFragment : Fragment() {
         val prueba = Prueba(
             0,
             0,
-            0,
+            idUsuario,
             toInstant(System.currentTimeMillis()),
             getPreguntasYresultados())
         println(prueba)

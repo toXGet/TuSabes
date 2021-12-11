@@ -1,59 +1,75 @@
 package com.example.tusabes
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import com.example.tusabes.Convertidores.Companion.toInstant
+import com.example.tusabes.database.TuSabesDB
+import com.example.tusabes.databinding.FragmentPruebaDetalleBinding
+import com.example.tusabes.model.Pregunta
+import com.example.tusabes.model.Prueba
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PruebaDetalleFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PruebaDetalleFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentPruebaDetalleBinding? = null
+    private val binding get() = _binding!!
+
+    private var paramBundle = Bundle()
+    private var listaInicialPreguntas = emptyList<String>()
+    private var listaPreguntas = emptyList<Pregunta>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_prueba_detalle, container, false)
+        _binding = FragmentPruebaDetalleBinding.inflate(inflater,container,false)
+
+        paramBundle = requireArguments()
+
+        cargarPrueba()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PruebaDetalleFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PruebaDetalleFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun cargarPrueba() {
+        var prueba = Prueba(0,0,0,toInstant(0),"")
+        runBlocking(Dispatchers.IO) {
+            val context = activity?.applicationContext
+            val database = context?.let { TuSabesDB.getDataBase(it) }
+            prueba = database?.PruebasDAO()?.getPrueba(paramBundle.getInt("idPrueba"))!!
+        }
+        binding.tvIdPruebaDetalle.text = "${prueba.id}"
+        binding.tvPruebaFecha.text = "${prueba.fecha.toString()}"
+        if (prueba.resultado.toString().isNullOrEmpty() || prueba.resultado == 0){
+            binding.tvPruebaResultado.text = "No Resuelta"
+        }else{
+            binding.tvPruebaResultado.text = "Calificación: ${prueba.resultado}"
+        }
+        var original = prueba.preguntas.split(Regex(",[0-9]{1,2}:"))
+        listaInicialPreguntas = prueba.preguntas.split(Regex(":[0-9],"))
+
+
+        /*listaInicialPreguntas = prueba.preguntas.split(Regex(":[0-9],"))
+        listaInicialPreguntas = prueba.preguntas.split(',')
+        for (i in listaInicialPreguntas){
+            i = i.substring(0,)
+        }*/
+
+        println("$listaInicialPreguntas Y SON ${listaInicialPreguntas.count()} ORIGINAL ES $original - ${original.count()}")
     }
+
+
 }

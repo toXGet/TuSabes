@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.Thread.sleep
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -86,14 +87,15 @@ class RegistroFragment : Fragment() {
 
     private fun grabarDatos(usuario: User) {
         val context = activity?.applicationContext
-        CoroutineScope(Dispatchers.IO).launch{
+        var usuarioById = User(0,"","","","","","")
+        runBlocking(Dispatchers.IO) {
             val database = context?.let { TuSabesDB.getDataBase(it)}
             if (database != null){
                 database.UsersDAO().insert(usuario)
+                usuarioById = database.UsersDAO().getUserByNick(usuario.usuario)
             }
         }
-        sleep(500)
-        val boton = {_:DialogInterface,_:Int -> iniciar(usuario.rol)}
+        val boton = {_:DialogInterface,_:Int -> iniciar(usuarioById)}
         AlertDialog.Builder(binding.root.context)
             .setTitle("${usuario.usuario} Registrado")
             .setMessage("Tus datos han sido registrados de manera correcta")
@@ -102,11 +104,17 @@ class RegistroFragment : Fragment() {
             .show()
     }
 
-    private fun iniciar(rol: String) {
-        if (rol == "Profesor"){
+    private fun iniciar(usuario: User) {
+        val bundleUser = bundleOf(
+            "id" to usuario.id,
+            "usuario" to usuario.usuario,
+            "rol" to usuario.rol
+        )
+        if (usuario.rol == "Profesor"){
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.fragmentContenedorPrincipal,ProfesorFragment::class.java,null,"profesor")
                 ?.commit()
+            activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
         }else {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.setReorderingAllowed(true)
@@ -117,6 +125,7 @@ class RegistroFragment : Fragment() {
                     "estudiante"
                 )
                 ?.commit()
+            activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
         }
         BienvenidaFragment().cerrar()
     }
@@ -190,7 +199,7 @@ class RegistroFragment : Fragment() {
             val context = activity?.applicationContext
             var usuario: User
             var comparadorId = 0
-            CoroutineScope(Dispatchers.IO).launch {
+            runBlocking(Dispatchers.IO){
                 val database = context?.let { TuSabesDB.getDataBase(it) }
                 if (database != null) {
                     usuario = database.UsersDAO().getUserByNick(entrada)
@@ -198,7 +207,7 @@ class RegistroFragment : Fragment() {
 
                 }
             }
-            sleep(500)
+
             return comparadorId == 0
         } else {
             var regularExp: String

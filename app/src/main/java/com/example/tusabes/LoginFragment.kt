@@ -45,16 +45,14 @@ class LoginFragment : Fragment() {
             Toast.makeText(context,"Debes ingresar tu nombre de usuario y tu clave", Toast.LENGTH_LONG).show()
         }else{
             var loginUser: User? = null
-            CoroutineScope(Dispatchers.IO).launch{
+            runBlocking(Dispatchers.IO){
                 val database = context?.let { TuSabesDB.getDataBase(it)}
                 if (database != null){
                     loginUser = database.UsersDAO().getUserByNick(usuario)
-
                     println("segunda entrada usuario es $loginUser")
-
                 }
             }
-            sleep(500)
+
             if (loginUser == null) {
                     println("tercera entrada usuario es $loginUser")
                     val botonCancelar = { _: DialogInterface, _: Int ->

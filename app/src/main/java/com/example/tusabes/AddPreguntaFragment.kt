@@ -38,7 +38,7 @@ class AddPreguntaFragment : Fragment() {
 
         mostrarCategorias()
 
-        idPregunta = requireArguments().getInt("id")
+        idPregunta = requireArguments().getInt("preguntaId")
         if (idPregunta != 0){ verPregunta(idPregunta) }
 
         parentFragmentManager.setFragmentResultListener("requestKey",this) { key, bundle ->
@@ -53,6 +53,12 @@ class AddPreguntaFragment : Fragment() {
                     binding.llBotonesActualizar.visibility = View.VISIBLE
                 }
             }
+        }
+
+        if (requireArguments().getString("rol") == "estudiante"){
+            binding.tiRespuesta.visibility = View.GONE
+            binding.swEditarPregunta.visibility = View.GONE
+            binding.btnEliminarPregunta.visibility = View.GONE
         }
 
         binding.btnGuardarPregunta.setOnClickListener { guardarPreguntaNueva() }
