@@ -182,9 +182,12 @@ class NuevaPruebaFragment : Fragment() {
             }
             println("NUMERO RANDOM: ${indiceRandom} el array es ${arraySubproceso}")
         }
+        var cadenaPreguntas = mutableListOf<String>()
         for (i in arraySubproceso){
-            preguntas = preguntas + i.id.toString() + ":" + i.respuesta.toString() + ","
+            cadenaPreguntas.add("${i.id}:${i.respuesta}")
+            //preguntas = preguntas + i.id.toString() + ":" + i.respuesta.toString() + ","
         }
+        preguntas = cadenaPreguntas.toString().replace(" ","")
         return preguntas
     }
 
