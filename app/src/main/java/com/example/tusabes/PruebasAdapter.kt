@@ -31,7 +31,7 @@ class PruebasAdapter(private val mContext: Context, val listaPruebas: List<Prueb
         }else{
             tvResuelto.text = "Resuelta"
             tvResuelto.setTextColor(ContextCompat.getColor(mContext,R.color.teal_700))
-            tvNota.text = "${prueba.resultado}"
+            tvNota.text = "Calificación: ${prueba.resultado}"
             if (prueba.resultado < 3){
                 tvNota.setTextColor(ContextCompat.getColor(mContext,R.color.red_700))
             }else{
