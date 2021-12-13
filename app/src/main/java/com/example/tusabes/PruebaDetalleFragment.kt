@@ -33,7 +33,6 @@ class PruebaDetalleFragment : Fragment() {
     private var listaInicialPreguntas = mutableListOf<String>()
     private var listaPreguntasResueltas = mutableListOf<String>()
 
-    private var listaRespuestasCorrectas = mutableListOf<String>()
     private var listaRespuestasUsuario = mutableListOf<String>()
 
     private var calificacion = 0
@@ -61,59 +60,58 @@ class PruebaDetalleFragment : Fragment() {
 
         cargarPrueba()
 
+        binding.btnPresentarPrueba.setOnClickListener { comenzarAresponder() }
+
         binding.btnCancelarPrueba.setOnClickListener { cancelarYvolver() }
 
-        binding.btnPresentarPrueba.setOnClickListener {
-            binding.btnCalificarPrueba.isEnabled = true
-            binding.btnCalificarPrueba.visibility = View.VISIBLE
-        }
-        binding.btnCalificarPrueba.setOnClickListener {
-            chequeaPregContestadas()
-        }
+        binding.btnCalificarPregunta.setOnClickListener { procesarPregunta() }
+
+        binding.btnCalificarPrueba.setOnClickListener { chequeaPregContestadas() }
+
         binding.btnSiguientePregunta.setOnClickListener {
+            navegacionPreguntas("ffw")
             if (binding.swOpAvanzadasPrueba.isChecked) { mostrarRespuesta() }
-            if (binding.btnCalificarPrueba.isEnabled) {
-                if (binding.rgGrupoOpciones.checkedRadioButtonId == -1){
-                    Toast.makeText(binding.root.context, "Debes escoger una Respuesta", Toast.LENGTH_LONG).show()
-                }
-                if (listaPreguntasResueltas.contains(listaPreguntas[preguntaActual].id.toString())){
-                    Toast.makeText(binding.root.context, "Esta Pregunta ya la Habías Contestado en la prueba actual",Toast.LENGTH_LONG).show()
-                    navegacionPreguntas("ffw")
-                }
-                else{
-                    notasPreguntas()
-                    navegacionPreguntas("ffw")
-                }
-            }else{
-                navegacionPreguntas("ffw")
-            }
         }
         binding.btnAnteriorPregunta.setOnClickListener {
+            navegacionPreguntas("rew")
             if (binding.swOpAvanzadasPrueba.isChecked) { mostrarRespuesta() }
-            if (binding.btnCalificarPrueba.isEnabled) {
-                if (binding.rgGrupoOpciones.checkedRadioButtonId == -1){
-                    Toast.makeText(binding.root.context, "Debes escoger una Respuesta", Toast.LENGTH_LONG).show()
-                }
-                if (listaPreguntasResueltas.contains(listaPreguntas[preguntaActual].id.toString())){
-                    Toast.makeText(binding.root.context, "Esta Pregunta ya la Habías Contestado en la prueba actual",Toast.LENGTH_LONG).show()
-                    navegacionPreguntas("rew")
-                }
-                else{
-                    notasPreguntas()
-                    navegacionPreguntas("rew")
-                }
-            }else{
-                navegacionPreguntas("rew")
-            }
         }
         binding.rgGrupoOpciones.setOnCheckedChangeListener { group, checkedId ->
-            if (binding.btnCalificarPrueba.isEnabled){
-                chequeaRadioGroup()
-            }
+            chequeaRadioGroup()
         }
+
         binding.swOpAvanzadasPrueba.setOnClickListener { mostrarRespuesta() }
 
         return binding.root
+    }
+
+    private fun procesarPregunta(){
+        if (binding.rgGrupoOpciones.checkedRadioButtonId == -1){
+            Toast.makeText(binding.root.context, "Debes escoger una Respuesta", Toast.LENGTH_LONG).show()
+        }else {
+            notasPreguntas()
+            if (preguntaActual == listaPreguntas.lastIndex) {
+                binding.btnCalificarPrueba.visibility = View.VISIBLE
+                binding.btnCalificarPregunta.visibility = View.GONE
+            } else {
+                navegacionPreguntas("ffw")
+            }
+        }
+    }
+
+    private fun comenzarAresponder(){
+        binding.btnCalificarPregunta.visibility = View.VISIBLE
+        binding.llNavegacion.visibility = View.GONE
+        binding.rgGrupoOpciones.clearCheck()
+        preguntaActual = 0
+        var cuenta = preguntaActual
+        binding.tvPruebaPreguntaCuenta.text = "Pregunta ${cuenta + 1} de ${listaPreguntas.count()}"
+        binding.tvEnunciadoPreguntaPrueba.text = listaPreguntas[preguntaActual].enunciado
+        binding.rOpcion1.text = listaPreguntas[preguntaActual].opcion1
+        binding.rOpcion2.text = listaPreguntas[preguntaActual].opcion2
+        binding.rOpcion3.text = listaPreguntas[preguntaActual].opcion3
+        binding.rOpcion4.text = listaPreguntas[preguntaActual].opcion4
+        binding.rOpcion5.text = listaPreguntas[preguntaActual].opcion5
     }
 
     private fun mostrarRespuesta() {
@@ -145,7 +143,7 @@ class PruebaDetalleFragment : Fragment() {
     }
 
     private fun navegacionPreguntas(sentido: String) {
-        if (!binding.btnCalificarPrueba.isEnabled){ binding.rgGrupoOpciones.clearCheck()}
+        binding.rgGrupoOpciones.clearCheck()
         when (sentido){
             "ffw" -> {
                 if (preguntaActual == listaPreguntas.lastIndex){
@@ -162,7 +160,8 @@ class PruebaDetalleFragment : Fragment() {
                 }
             }
         }
-        binding.tvPruebaPreguntaCuenta.text = "Pregunta ${preguntaActual + 1} de ${listaPreguntas.count()}"
+        var cuenta = preguntaActual
+        binding.tvPruebaPreguntaCuenta.text = "Pregunta ${cuenta + 1} de ${listaPreguntas.count()}"
         binding.tvEnunciadoPreguntaPrueba.text = listaPreguntas[preguntaActual].enunciado
         binding.rOpcion1.text = listaPreguntas[preguntaActual].opcion1
         binding.rOpcion2.text = listaPreguntas[preguntaActual].opcion2
@@ -173,23 +172,21 @@ class PruebaDetalleFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun chequeaPregContestadas() {
-        if (listaPreguntasResueltas.sort() == listaInicialPreguntas.sort()){
-            calificacion /= listaPreguntas.count()
-            if (calificacion < 3) { binding.tvPruebaResultado
-                .setTextColor(ContextCompat.getColor(binding.root.context,R.color.red_700))
-            }else { binding.tvPruebaResultado
-                .setTextColor(ContextCompat.getColor(binding.root.context,R.color.teal_700))}
-            binding.tvPruebaResultado.text = "Calificación: ${prueba.resultado}"
-            //binding.tvPruebaResultado.text = "${calificacion}"
-            completaPruebaGrabaYsale()
-        }else{
-            Toast.makeText(binding.root.context, "Para Completar la Prueba debes Contestar Todas las preguntas", Toast.LENGTH_LONG).show()
-        }
+        calificacion /= listaPreguntas.count()
+        if (calificacion < 3) { binding.tvPruebaResultado
+            .setTextColor(ContextCompat.getColor(binding.root.context,R.color.red_700))
+        }else { binding.tvPruebaResultado
+            .setTextColor(ContextCompat.getColor(binding.root.context,R.color.teal_700))}
+        binding.tvPruebaResultado.text = "Calificación: $calificacion"
+        completaPruebaGrabaYsale()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun completaPruebaGrabaYsale() {
-        prueba.preguntas = listaRespuestasUsuario.toString().replace(" ", "")
+        prueba.preguntas = listaRespuestasUsuario.toString()
+            .replace(" ", "")
+            .replace("[", "")
+            .replace("]","")
         prueba.fecha = toInstant(System.currentTimeMillis())
         prueba.resultado = calificacion
         runBlocking(Dispatchers.IO) {
@@ -213,6 +210,7 @@ class PruebaDetalleFragment : Fragment() {
             binding.rOpcion3.id -> { notaPregunta = 3 }
             binding.rOpcion4.id -> { notaPregunta = 4 }
             binding.rOpcion5.id -> { notaPregunta = 5 }
+            -1 -> notaPregunta = 0
         }
     }
 
@@ -244,7 +242,7 @@ class PruebaDetalleFragment : Fragment() {
             val database = context?.let { TuSabesDB.getDataBase(it) }
             prueba = database?.PruebasDAO()?.getPrueba(paramBundle.getInt("idPrueba"))!!
         }
-        binding.tvIdPruebaDetalle.text = "${prueba.id}"
+        binding.tvIdPruebaDetalle.text = " ${prueba.id}"
         binding.tvPruebaFecha.text = "${prueba.fecha.toString()}"
         if (prueba.resultado.toString().isNullOrEmpty() || prueba.resultado == 0){
             binding.tvPruebaResultado.text = "No Resuelta"
@@ -270,8 +268,8 @@ class PruebaDetalleFragment : Fragment() {
     }
 
     private fun cargarPreguntas(preguntas: String) {
-        listaRespuestasCorrectas = preguntas.split(Regex("(^[0-9]{1,2}:)|(,[0-9]{1,2}:)")).toMutableList()
-        listaRespuestasCorrectas.removeAt(0)
+        //listaRespuestasCorrectas = preguntas.split(Regex("(^[0-9]{1,2}:)|(,[0-9]{1,2}:)")).toMutableList()
+        //listaRespuestasCorrectas.removeAt(0)
         //listaRespuestasCorrectas[listaRespuestasCorrectas.lastIndex] = listaRespuestasCorrectas.elementAt(listaRespuestasCorrectas.lastIndex).replace(",","")
 
         listaInicialPreguntas = preguntas.split(Regex("(:[0-9],)|(:[0-9]$)")).toMutableList()
@@ -285,7 +283,8 @@ class PruebaDetalleFragment : Fragment() {
             }
             //println("EN FOR ${listaPreguntas.count()}: $listaPreguntas")
         }
-        binding.tvPruebaPreguntaCuenta.text = "Pregunta ${preguntaActual + 1} de ${listaPreguntas.count()}"
+        var cuenta = preguntaActual
+        binding.tvPruebaPreguntaCuenta.text = "Pregunta ${cuenta + 1} de ${listaPreguntas.count()}"
         binding.tvEnunciadoPreguntaPrueba.text = listaPreguntas[preguntaActual].enunciado
         binding.rOpcion1.text = listaPreguntas[preguntaActual].opcion1
         binding.rOpcion2.text = listaPreguntas[preguntaActual].opcion2
