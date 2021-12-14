@@ -54,7 +54,7 @@ class PruebaDetalleFragment : Fragment() {
         _binding = FragmentPruebaDetalleBinding.inflate(inflater,container,false)
 
         paramBundle = requireArguments()
-        if (paramBundle.getString("rol") == "estudiante") {
+        if (paramBundle.getString("rol") == "Estudiante") {
             binding.swOpAvanzadasPrueba.visibility = View.GONE
         }
 

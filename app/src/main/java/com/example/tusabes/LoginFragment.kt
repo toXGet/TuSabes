@@ -90,16 +90,16 @@ class LoginFragment : Fragment() {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.setReorderingAllowed(true)
                 ?.replace(R.id.fragmentContenedorPrincipal,
-                    ProfesorFragment::class.java,null,"profesor")
+                    ProfesorFragment::class.java,bundleUser,"profesor")
                 ?.commit()
-            activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
+            //activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
         }else {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.setReorderingAllowed(true)
                 ?.replace(R.id.fragmentContenedorPrincipal,
-                    EstudianteFragment::class.java,null,"estudiante")
+                    EstudianteFragment::class.java,bundleUser,"estudiante")
                 ?.commit()
-            activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
+            //activity?.supportFragmentManager?.setFragmentResult("requestKey", bundleUser)
         }
         BienvenidaFragment().cerrar()
 

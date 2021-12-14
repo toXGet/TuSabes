@@ -54,8 +54,9 @@ class AddPreguntaFragment : Fragment() {
                 }
             }
         }
+        println("ARGUMENTOS PASADOS: ${requireArguments()}")
 
-        if (requireArguments().getString("rol") == "estudiante"){
+        if (requireArguments().getString("rol") == "Estudiante"){
             binding.tiRespuesta.visibility = View.GONE
             binding.swEditarPregunta.visibility = View.GONE
             binding.btnEliminarPregunta.visibility = View.GONE

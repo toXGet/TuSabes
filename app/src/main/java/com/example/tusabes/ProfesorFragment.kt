@@ -14,8 +14,7 @@ class ProfesorFragment : Fragment() {
     private var _binding: FragmentProfesorBinding? = null
     private val binding get() = _binding!!
     var fragmento: Fragment? = null
-    var myId = 0
-    var myRol = ""
+    var argumentos: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,20 +28,12 @@ class ProfesorFragment : Fragment() {
 
         _binding = FragmentProfesorBinding.inflate(inflater,container,false)
 
-        parentFragmentManager.setFragmentResultListener("requestKey",this){
-                key, bundle ->
-            binding.tvNombreProfesor.text = bundle.getString("usuario")
-            binding.tvRolProfesor.text = bundle.getString("rol")
-            myId = bundle.getInt("id")
-            myRol = bundle.getString("rol").toString()
-        }
-        val paraBundle = bundleOf(
-            "id" to myId,
-            "rol" to myRol
-        )
+        argumentos = requireArguments()
+        binding.tvNombreProfesor.text = argumentos!!.getString("usuario")
+        binding.tvRolProfesor.text = argumentos!!.getString("rol")
 
         parentFragmentManager.beginTransaction().replace(R.id.fragmentContenedorProfesor,
-            ListaPreguntasFragment::class.java, paraBundle,"preguntas")
+            ListaPreguntasFragment::class.java, argumentos,"preguntas")
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
 
@@ -54,7 +45,7 @@ class ProfesorFragment : Fragment() {
                     2 -> fragmento = ListaPruebasFragment()
                 }
                 parentFragmentManager.beginTransaction().replace(R.id.fragmentContenedorProfesor,
-                    fragmento!!::class.java, paraBundle,"cambio fragmentos")
+                    fragmento!!::class.java, argumentos,"cambio fragmentos")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .commit()
             }

@@ -44,7 +44,7 @@ class ListaPreguntasFragment : Fragment() {
         _binding = FragmentListaPreguntasBinding.inflate(inflater,container,false)
 
         paramBundle = requireArguments()
-        if (paramBundle.getString("rol") == "estudiante") {
+        if (paramBundle.getString("rol") == "Estudiante") {
             binding.btnAnadirPregunta.visibility = View.GONE
         }
         mostrarPreguntas()
