@@ -187,7 +187,10 @@ class NuevaPruebaFragment : Fragment() {
             cadenaPreguntas.add("${i.id}:${i.respuesta}")
             //preguntas = preguntas + i.id.toString() + ":" + i.respuesta.toString() + ","
         }
-        preguntas = cadenaPreguntas.toString().replace(" ","")
+        preguntas = cadenaPreguntas.toString()
+            .replace(" ","")
+            .replace("[", "")
+            .replace("]","")
         return preguntas
     }
 

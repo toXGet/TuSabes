@@ -64,7 +64,10 @@ class PruebaDetalleFragment : Fragment() {
 
         binding.btnCancelarPrueba.setOnClickListener { cancelarYvolver() }
 
-        binding.btnCalificarPregunta.setOnClickListener { procesarPregunta() }
+        binding.btnCalificarPregunta.setOnClickListener {
+            if (binding.swOpAvanzadasPrueba.isChecked) { mostrarRespuesta() }
+            procesarPregunta()
+        }
 
         binding.btnCalificarPrueba.setOnClickListener { chequeaPregContestadas() }
 
